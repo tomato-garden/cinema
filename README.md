@@ -62,10 +62,10 @@ movie-theater/
 
 ## ⚙️ 설치 및 실행 방법
 1. 웹 서버(Apache 등)와 PHP 설치
-2. MySQL 설치 및 `movie_theater` 데이터베이스 생성
+2. MySQL 설치 및 `movie` 데이터베이스 생성
 3. 프로젝트 파일을 웹 서버 루트 디렉토리에 복사
 4. `php/db.php`에서 DB 접속 정보 수정
-5. 브라우저에서 `http://localhost/movie-theater/index.html` 접속
+5. 브라우저에서 `http://localhost/html/main.html` 접속
 
 ## 👤 사용자 역할
 - **일반 사용자**: 영화 목록 확인, 예매, 매점 구매, 관심 등록
