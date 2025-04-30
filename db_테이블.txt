@@ -183,7 +183,7 @@ CREATE TABLE purchases (
 
 ALTER TABLE reviews ADD COLUMN updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
 
-
+=====================================================================================
 
 INSERT INTO cinemas (name, region, address, contact) VALUES
 ('FF 시네마 서울 강남', '서울', '서울시 강남구 테헤란로 152', '02-1234-5678'),
