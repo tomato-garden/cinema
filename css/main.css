@@ -1,0 +1,638 @@
+@font-face {
+    font-family: 'SBAggroB';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SBAggroB.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'RixYeoljeongdo_Regular';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2102-01@1.0/RixYeoljeongdo_Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    width: 100vw;
+    overflow-x: hidden;
+}
+
+/* main.css */
+body {
+    overflow-x: auto; /* 또는 제거 */
+}
+
+/* 드롭다운 메뉴 보이게 하는 클래스 */
+.dropdown-menu {
+    display: none;
+}
+ .dropdown-menu.show {
+     display: block;
+ }
+
+
+header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 20px;
+    position: relative;
+}
+
+.logo {
+    position: absolute;
+    left: 30px;
+    bottom: 145px;
+    cursor: pointer; 
+
+}
+
+.logo img {
+    height: 100px;
+    position: absolute; 
+    cursor: pointer; 
+}
+
+
+/* 검색 컨테이너 */
+.search-container {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* 검색 바와 버튼을 중앙 정렬 */
+    width: 100%;
+    position: relative;
+    z-index: 2;
+    margin-top: 10px;
+    padding: 0 20px;
+}
+
+/* 검색 그룹 (검색 바 + 검색 버튼) */
+.search-group {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* 검색 바와 버튼 사이 간격 */
+}
+
+/* 검색 바 */
+.search-bar {
+    display: flex;
+    align-items: center;
+    border: 1px solid #0091eb;
+    border-radius: 20px;
+    padding: 5px 8px;
+    width: auto;
+    max-width: 350px;
+    height: 20px;
+    flex-grow: 1;
+}
+
+/* 버튼 공통 스타일 */
+.search-btn, .menu-btn {
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+
+.search-btn img {
+    height: 33px; 
+}
+
+.menu-btn img {
+    height: 45px; 
+}
+
+/* 메뉴 버튼을 오른쪽 끝으로 이동 */
+.menu-btn {
+    margin-left: auto;
+    position: absolute;
+    right: 20px;
+}
+
+
+
+.search-bar input {
+    border: none;
+    outline: none;
+    width: 100%;
+}
+
+
+.banner {
+    width: 100vw;
+    height: 350px; /* 원하는 배너 높이 설정 */
+    padding: 0 10 0 10px;
+    overflow: hidden; /* 넘치는 부분 감추기 */
+    box-sizing: border-box;
+    justify-content: center; /* 이미지 중앙 정렬 */
+    margin-bottom: 10px;
+}
+
+.banner-img img {
+    width: calc(100vw);
+    height: 350px;
+    object-fit: cover; /* 비율 유지하면서 좌우 꽉 채우기 */
+    display: block;
+    margin: 0 auto;
+}
+
+
+.nav-container {
+    width: calc(100vw);
+    text-align: center;
+    margin-top: 20px; 
+}
+
+.nav-top-line {
+    width: 100vw;
+    height: 2px;
+    background-color: black;
+    margin-bottom: 3px;
+}
+
+.nav-bottom-line {
+    width: calc(100vw);
+    height: 2px;
+    background-color: black;
+    margin-top: 3px;
+}
+
+
+/* 네비게이션 스타일 */
+nav ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 10px 0;
+    margin: 0;
+}
+
+nav ul li {
+    margin: 0 20px;
+}
+
+/* 네비게이션 버튼 기본 스타일 */
+nav ul li a {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    padding: 10px 15px; /* 배경색 적용을 위해 패딩 추가 */
+    transition: background-color 0.2s ease-in-out; /* 부드러운 전환 효과 */
+}
+
+/* hover 시 배경색 변경 */
+nav ul li a:hover {
+    background-color: #69aae765;
+    color: #0091eb;
+    transition: background-color 0.3s ease;
+}
+
+.menu-icon {    
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.menu-container {
+    position: absolute;
+    right: 0; /* 오른쪽 끝으로 이동 */
+    bottom: 40px;
+    transform: translateY(-50%); /* 세로 중앙 정렬 */
+}
+
+/* 드롭다운 메뉴 기본 스타일 (숨김) */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    margin-top: 40px;
+    margin-right: 30px;
+    right: 0;
+    top: 120%;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    width: 150px;
+    text-align: center;
+    padding: 10px 0;
+    z-index: 10;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 드롭다운 메뉴 안의 버튼 스타일 */
+.dropdown-menu a {
+    display: block;
+    padding: 10px 15px;
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    transition: background-color 0.3s ease-in-out;
+}
+
+/* hover 시 배경색 변경 */
+.dropdown-menu a:hover {
+    background-color: #0091eb;
+    color: white;
+}
+
+/* 로그아웃 항목 스타일 */
+.dropdown-menu .logout {
+    color: #afafaf; /* 흐리게 하기 (회색) */
+}
+
+/* ✅ 마우스를 올리면 드롭다운 메뉴 표시 */
+.menu-container:hover .dropdown-menu {
+    display: block;
+}
+
+main {
+    background-color: black;
+}
+
+
+/* 영화 TOP 10 제목 스타일
+.top-movie-title {
+    margin-top: 100px;
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-align: center;
+    color: #ffffff;
+} */
+
+
+.top-movies-container {
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+    flex-direction: column;
+    padding-bottom: 70px;
+    scrollbar-width: none;
+    justify-content: center;
+    width: 100vw;
+    margin-bottom: 30px; /* 아래쪽 여백 추가 */
+    margin-top: 60px;
+    background-color: black; /* 배경색을 검은색으로 설정 */
+    text-align: center; /* 내용 가운데 정렬 */
+    align-items: center;
+    position: relative;
+    gap: 20px;
+}
+
+
+
+.top-movies {
+    display: flex;
+    flex-wrap: nowrap; /* 줄바꿈 방지 */
+    gap: 20px; /* 영화 아이템 간격 */
+}
+
+
+.movie-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 가로 중앙 정렬 */
+    justify-content: center; /* 세로 중앙 정렬 */
+}
+
+
+
+.movie-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* 버튼 간격 */
+    margin-top: 20px; /* 이미지 아래 여백 */
+}
+
+
+.top-movies-container::-webkit-scrollbar {
+    display: none;
+}
+
+.top-movies {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 30px; /* 🎯 영화 간격 조정 */
+    padding: 0 5vw; /* 🎯 좌우 여백 동일하게 조정 */
+    min-width: fit-content;
+    justify-content: center; /* 🎯 내부 요소 중앙 정렬 */
+    margin-top: 10px;
+}
+
+.movie-box {
+    position: relative;
+    width: 230px;
+    height: 360px;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+}
+
+.movie-box:hover {
+    transform: scale(1.03); /* 박스 전체가 살짝 확대됨 */
+}
+
+/* 이미지 자체는 비율 유지하며 상단 기준으로 채움 */
+.movie-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+    padding-top: 10px; /* 👈 상단 여백 추가 */
+}
+
+
+
+
+
+
+/* 버튼을 포스터 내부 아래쪽 중앙에 배치 */
+.movie-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* 버튼 간격 */
+    margin-top: 20px; /* 이미지 아래 여백 */
+}
+
+
+/* 버튼 스타일 */
+.movie-buttons button {
+    background-color: rgba(255, 255, 255, 0.95);
+    color: black;
+    border: none;
+    padding: 8px 15px; /* 버튼 크기 조정 */
+    font-size: 15px; /* 글자 크기 살짝 증가 */
+    font-weight: bold;
+    border-radius: 20px; /* 더 부드러운 곡선 */
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.15); /* 부드러운 그림자 */
+}
+
+/* 버튼 호버 효과 */
+.movie-buttons button:hover {
+    background-color: #0078d7; /* 더 차분한 파란색 */
+    color: white;
+    box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.25); /* 그림자 강조 */
+}
+
+/* 버튼 클릭 시 효과 */
+.movie-buttons button:active {
+    transform: scale(0.98); /* 클릭할 때 살짝 작아지는 효과 */
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* 버튼 컨테이너 스타일 */
+.movie-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 12px; /* 버튼 간격 증가 */
+    margin-top: 15px;
+}
+
+
+/* 영화 랭킹 숫자 기본 스타일 */
+.movie-rank {
+    position: absolute;
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    left: 10px;  /* 🎯 숫자를 정확히 가운데 정렬 */
+}
+
+/* 왼쪽 위 정렬: 1, 2, 3번 전용 */
+.top-left-rank {
+    top: 5px;
+    left: 5px;
+    font-size: 75px;
+    text-shadow: 0 0 4px black;
+    font-weight: 300;
+    font-family: 'RixYeoljeongdo_Regular';
+}
+
+
+.new-movies {
+    text-align: center;
+    margin: 20px 0;
+    padding: 0; /* 간격 조정 */
+    margin-top: 110px;
+    margin-bottom: 110px;
+}
+
+.new-movie-box {
+    display: flex;
+    flex-direction: column; /* 내부 요소를 세로 정렬 */
+    justify-content: center; /* 내부 요소를 수직 중앙 정렬 */
+    align-items: center; /* 내부 요소를 가로 중앙 정렬 */
+    padding: 20px 40px; /* 🟢 내부 여백 증가 */
+    background-color: #ffffff;
+    border-radius: 10px; /* 🟢 둥근 테두리 살짝 더 강조 */
+    font-size: 1.8rem;
+    font-weight: bold;
+    border: 1px solid black;
+    height: 180px; /* 🟢 높이 증가 */
+    width: 330px; /* 🟢 너비 증가 */
+    max-width: 90%; /* 🟢 화면이 작아질 때 적절히 줄어들도록 설정 */
+    margin: 0 auto; /* 가운데 정렬 */
+}
+
+
+
+.enter {
+    font-size: 30px;
+    font-family: 'SBAggroB';
+    font-weight: 500;
+}
+
+.movie-count-wrapper {
+    margin-top: -15px; /* 🟢 기존보다 위로 올리기 */
+    display: flex;
+    justify-content: center;
+    align-items: center; /* 수직 정렬 */
+}
+
+.movie-count {
+    display: inline-block;
+    padding: 6px 12px;
+    background-color: black;
+    color: white;
+    font-size: 60px;
+    border-radius: 5px;
+    margin: 0 3px;
+    position: relative;
+    overflow: hidden;
+}
+
+.movie-count::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(120deg, rgba(255, 255, 255, 0.274) 50%);    transform: skewX(-25deg);
+    animation: shine 4.5s ease-in-out infinite;
+}
+
+@keyframes shine {
+    0% {
+        left: -100%;
+    }
+    10% {
+        left: 125%;
+    }
+    100% {
+        left: 125%;
+    }
+}
+
+
+
+.movie-text {
+    font-size: 3rem; /* 🟢 '개' 글자 크기 증가 */
+    font-weight: bold;
+    font-family: 'SBAggroB';
+    font-weight: 500;
+}
+
+
+
+/* 광고 섹션 스타일 */
+.ad-section {
+    background-color: white;  /* 배경을 흰색으로 */
+    width: 100%;
+    max-width: 1100px;
+    margin: 20px auto;  /* 위아래 여백 */
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 75px;
+}
+
+.ad-small-container {
+    display: flex;
+    gap: 15px; /* 광고 사이 여백 */
+    justify-content: center;
+}
+
+.ad-small {
+    width: 250px; /* 작은 광고 크기 */
+    height: 140px;
+    object-fit: cover; /* 이미지가 잘리지 않고 꽉 차게 */
+    border-radius: 5px;
+    box-shadow: 0 0 4px gray;
+}
+
+.ad-large {
+    width: 780px; /* 긴 광고 크기 */
+    height: 160px;
+    object-fit: cover; 
+    margin-top: 15px;
+    border-radius: 5px;
+    box-shadow: 0 0 4px gray;
+}
+
+.site-footer {
+    background-color: gray;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+    font-size: 14px;
+    width: 100%;
+}
+
+.footer-links {
+    margin-bottom: 10px;
+}
+
+.footer-links a {
+    color: #ccc;
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+.footer-links a:hover {
+    color: #fff;
+}
+
+.company-info p, .copyright p {
+    margin: 5px 0;
+    color: #bbb;
+}
+
+p {
+    cursor: default;
+}
+
+/* main.css에 추가 */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background-color: white;
+    border: 1px solid #ccc;
+    z-index: 100;
+}
+
+.dropdown-menu.show {
+    display: block;
+}
+
+/* 
+.movie-box {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .movie-box img {
+    display: block;
+    width: 100%;
+    height: auto;
+    transition: 0.3s ease;
+  }
+   */
+   .movie-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.75);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;  /* 왼쪽 정렬로 변경 */
+    text-align: left;             /* 텍스트 자체도 왼쪽 정렬 */
+    padding: 10px 15px;           /* 좌우 여백 적절히 설정 */
+    opacity: 0;
+    transition: 0.3s ease;
+    padding: 10px;
+    text-align: center;
+  
+    /* 👇 대사 잘림 방지 및 정렬 처리 */
+    font-size: 14px;
+    line-height: 1.4;
+    overflow: hidden;
+    word-break: keep-all;     /* 단어가 중간에 끊기지 않도록 */
+    text-overflow: ellipsis;  /* 말줄임표 */
+    white-space: normal;      /* 여러 줄 허용 */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+  }
+  
+  
+  .movie-box:hover .movie-overlay {
+    opacity: 1;
+  }
+  
+  .movie-box:hover img {
+    filter: brightness(70%);
+  }
+  

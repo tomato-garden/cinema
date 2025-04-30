@@ -1,0 +1,26 @@
+    <div class="main-content">
+      <h1>고객 관리</h1>
+      <div class="breadcrumb">관리자 페이지 / 고객 관리</div>
+    
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="고객 아이디 검색">
+        <button onclick="searchUser()">검색</button>
+      </div>
+    
+      <table>
+        <thead>
+          <tr>
+            <th>순위</th>
+            <th>이름</th>
+            <th>고객 아이디</th>
+            <th>매점 실적</th>
+            <th>영화관 실적</th>
+          </tr>
+        </thead>
+        <tbody id="userTableBody"></tbody>
+      </table>
+    
+      <div id="purchaseDetails"></div>
+  </div>
+  <link rel="stylesheet" href="admin-user.js">
+  

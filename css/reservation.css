@@ -1,0 +1,142 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    text-align: center;
+}
+
+.all-movie-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin: 0 auto;
+    margin-top: 100px;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.category {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* 왼쪽 정렬 */
+    position: sticky;
+    margin-bottom: 50px; /* 각 category 사이에 여백 추가 */
+}
+
+.category h2 {
+    margin: 0;
+    padding: 10px 0;
+    margin-bottom: -15px;
+    font-size: 22px;
+    padding: 0;
+}
+
+.movie-list-container {
+    margin-left: 20px; /* 영화 리스트 왼쪽 여백 */
+}
+
+.more-button {
+    margin-left: auto; /* 오른쪽으로 정렬 */
+    font-size: 14px;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    color: gray;
+    text-decoration: underline;
+}
+.more-button:hover{
+    color: rgb(0, 132, 255);
+}
+
+.movie-list {
+    display: flex;
+    justify-content: center; /* 가운데 정렬 */
+    gap: 20px; /* 항목 간격 */
+}
+
+.movie {
+    display: inline-block;
+    text-align: center;
+    position: relative;
+    width: auto; /* 영화 너비를 고정하지 않음 */
+    height: auto;
+}
+
+.movie img {
+    width: 200px;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 5px;
+    background-color: rgb(0, 0, 0);
+    display: block;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* 크기 변화와 그림자 애니메이션 추가 */
+}
+
+.movie img:hover {
+    transform: scale(1.05); /* 크기를 1.05배로 확대 */
+    box-shadow: 0 0 5px gray;
+}
+
+.movie img:not([src]) {
+    content: "";
+}
+
+
+.movie:hover img {
+    opacity: 0.7;
+}
+
+.movie-title {
+    font-size: 16px;
+    margin-top: 10px;
+    margin-bottom: 4px;
+}
+
+.movie-time {
+    font-size: 14px;
+    color: gray;
+}
+
+.movie-buttons {
+    position: absolute;
+    top: 42%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.movie:hover .movie-buttons {
+    display: flex;
+}
+
+.movie-buttons button {
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 5px;
+}
+
+.movie-buttons button:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+    color: black;
+}
+
+hr{
+    width: 10%;
+    margin-bottom: 30px;
+    margin-top: 0;
+}
+.movie-hr{
+    width: 60%;
+    margin-bottom: 3%;
+}

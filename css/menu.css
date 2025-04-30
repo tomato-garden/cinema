@@ -1,0 +1,198 @@
+html, body {
+    height: auto;
+    overflow-x: hidden; /* 좌우는 숨기되 */
+    overflow-y: auto;   /* 위아래 스크롤은 보이게 */
+}
+
+h2,p {
+    text-align: left;
+}
+
+
+.name1 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin: 0 auto;
+    margin-top: 100px;
+}
+
+.title1 {
+    font-size: 32px; 
+    font-weight: bold; 
+    text-align: center;
+}
+
+.container1 {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    margin-top: 30px;
+
+}
+
+.image-box1 {
+    width: 314px;  
+    height: 400px; 
+    border: 2px solid #ddd; 
+    overflow: hidden; 
+    border-radius: 10px; 
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+}
+
+.image-box1 img {
+    width: 100%; 
+    height: 100%;
+    object-fit: cover; 
+}
+
+.text-box1 {
+    width: 400px; 
+    margin-left: 100px; 
+    font-size: 15px;
+    line-height: 1.5 ;
+}
+
+.price1 {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 10px 0;
+    text-align: left; 
+}
+
+.button-container1 {
+    display: flex;
+    justify-content: center;
+    margin-top: 0;
+}
+
+.button1 {
+    background-color: #24529cda; 
+    color: white;  
+    font-size: 18px;
+    border: none;
+    padding: 15px 40px;
+    margin: 0 10px;
+    margin-bottom: 30px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s; 
+}
+
+
+
+.button1:hover {
+    background-color: #283866d3; 
+    color: white; 
+}
+
+.button2 {
+    background-color: transparent;
+    color: #dd2626;
+    font-size: 12px; /* 글자 조금 더 작게 */
+    border: 1.5px solid #dd2626;
+    width: 100px;  /* 버튼의 고정 가로 길이 */
+    height: 40px;  /* 버튼의 고정 세로 길이 */
+    margin: 0 8px;
+    margin-bottom: 20px;
+    margin-top: 9px;
+    border-radius: 20px; /* 둥근 정도 조정 */
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+    line-height: 32px; /* 글자가 버튼 중앙에 오도록 */
+    text-align: center;
+    padding: 0; /* 패딩 제거 */
+}
+
+
+.button2:hover {
+    background-color: #fafafa;
+    color: #dd2626  ;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+}
+
+.accordion {
+    width: 850px;
+    background-color: #d4d4d4;
+    border: none;
+    text-align: left;
+    padding: 15px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 3px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+  }
+
+  .accordion:hover {
+    background-color: #e0e0e0;
+  }
+
+  .accordion::after {
+    content: "▼"; 
+    font-size: 14px;
+    transition: transform 0.3s;
+  }
+
+  .accordion.active::after {
+    content: "▲"; 
+  }
+
+  .panel {
+    width: 818px;
+    display: block;
+    text-align: left;
+    padding: 10px 15px;
+    background-color: #d8d8d87c;
+    border-radius: 3px;
+    margin-top: 5px;
+    margin-bottom: 100px;
+    /* 아래 두 줄 제거 또는 수정 */
+    max-height: none;
+    overflow-y: visible;
+  }
+  
+
+hr.hr1{
+    width: 100%;
+    margin-bottom: 30px;
+    margin-top: 10px;
+}
+
+.policy-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.8;
+    color: #333;
+    background-color: #fffdfa;
+    border: 1px solid #f0e0c0;
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 1px 1px 5px rgba(0,0,0,0.05);
+  }
+  
+  .policy-list li::before {
+    content: "• ";
+    color: #c47f00;
+    font-weight: bold;
+  }
+  .policy-text {
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    white-space: pre-wrap;       /* 자동 줄바꿈 + 줄바꿈 유지 */
+    font-size: 10.5px;
+    line-height: 1.6;
+    border: none;
+    background: none;
+    font-family: inherit;
+    margin-top: 20px;
+  }
+  

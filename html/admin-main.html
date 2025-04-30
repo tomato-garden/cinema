@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>관리자 페이지</title>
+  <link rel="stylesheet" href="/css/admin-include.css">
+  <!-- Chart.js v4.4.0 CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      display: flex;
+    }
+    #content-container {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    iframe {
+      width: 100%;
+      height: 1000px;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- 사이드바 삽입될 영역 -->
+  <div id="sidebar-container"></div>
+
+  <!-- 콘텐츠 로드될 영역 -->
+  <div id="content-container">잠깐만 기다료바...</div>
+
+  <!-- 사이드바 로더 -->
+  <script src="/js/admin-include.js"></script>
+
+  <!-- 메인 로직 -->
+  <script src="/js/admin-main.js"></script>
+  
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>상품 상세</title>
+  <link rel="stylesheet" href="/css/menu.css" />
+</head>
+<body>
+  <div id="header"></div>
+  <script src="/js/init-header.js"></script>
+
+  <div class="name1">
+    <div class="container1">
+      <div class="image-box1">
+        <img src="" alt="상품 이미지" id="product-image" />
+      </div>
+      <div class="text-box1">
+        <h2 id="product-name">팝콘</h2>
+        <hr><br>
+        <div class="price1" id="product-price">8,000원</div>
+        <hr><br>
+        <p><strong>구성품: </strong><span id="product-components">설명</span></p>
+        <hr><br>
+        <p><strong>구매제한: </strong><span id="purchase-limit">구매당 최대 8매</span></p>
+        <hr><br>
+        <p><strong>유효기간: </strong><span id="validity">구매일로 30일간 출력 가능 (이후 미출력 시 자동 환불)</span></p>
+        <hr><br>
+        <div class="button-container1">
+          <button class="button1">구매하기</button>
+          <button class="button2">🎁선물</button>
+        </div>
+      </div>
+    </div>
+
+    <button class="accordion">구매 시 유의사항</button>
+    <div class="panel" style="display: none;">
+      <pre class="policy-text">
+상품에 대한 상세 정보를 반드시 확인해 주세요.
+구매하시기 전, 상품의 구성, 용량, 유효기간, 사용 방법 등 상세 정보를 충분히 숙지해 주시기 바랍니다.
+제품 이미지는 연출된 예시일 수 있으며, 실제 상품과 차이가 있을 수 있으므로 텍스트 설명을 반드시 확인해 주세요.
+
+결제가 완료된 이후에는 주문 변경이나 취소가 제한될 수 있습니다.
+결제 완료 시점부터 상품 준비가 진행되기 때문에, 단순한 옵션 변경이나 주문 취소는 불가하거나 별도 수수료가 부과될 수 있습니다.
+주문 전 모든 정보를 다시 한 번 확인해 주시기 바랍니다.
+
+단순 변심에 의한 환불은 관련 규정에 따라 제한될 수 있습니다.
+상품의 특성상, 개봉 후에는 환불이 어려우며, 사용 흔적이 있거나 포장 훼손이 발생한 경우에도 환불이 불가할 수 있습니다.
+변심으로 인한 환불은 전자상거래법 등 관련 법령 및 당사 환불 정책에 따릅니다.
+
+유효기간 내에 사용되지 않은 상품은 환불 대상이 아닐 수 있습니다.
+일부 상품은 구매일로부터 일정 기간 동안만 사용이 가능하며, 해당 기간이 지난 후에는 사용 및 환불이 모두 불가능합니다.
+반드시 유효기간을 확인하여 기간 내 사용해 주시기 바랍니다.
+
+상품 구매 시 위 유의사항에 모두 동의한 것으로 간주됩니다.
+결제 진행을 완료하신 경우, 상기 안내된 모든 사항을 충분히 이해하고 동의하신 것으로 처리되며,
+추후 이와 관련한 분쟁은 본 유의사항을 기준으로 판단됩니다.
+이용에 불편이 없도록 구매 전 신중한 검토를 부탁드립니다.
+      </pre>
+    </div>
+  </div>
+
+  <!-- ✅ 스크립트는 body 맨 마지막에 위치 -->
+  <script src="/js/menu.js"></script>
+</body>
+</html>

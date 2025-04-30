@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>관리자 로그인</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #3d3d3d;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .login-box {
+      background: white;
+      padding: 30px 40px;
+      border-radius: 5px;
+      box-shadow: 0 0 12px rgba(0,0,0,0.15);
+      width: 300px;
+      border: gray 0.5px solid;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #2c3e50;
+      color: white;
+      border: none;
+      border-radius: 3px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #1a242f;
+    }
+    .error-msg {
+      color: red;
+      font-size: 0.9em;
+      margin-top: 10px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <h2>관리자 로그인</h2>
+    <input type="text" id="admin-id" placeholder="아이디" />
+    <input type="password" id="admin-pw" placeholder="비밀번호" />
+    <button id="login-btn">로그인</button>
+    <div class="error-msg" id="error-msg"></div>
+  </div>
+
+  <script>
+    document.getElementById("login-btn").addEventListener("click", async () => {
+      const idInput = document.getElementById("admin-id");
+      const pwInput = document.getElementById("admin-pw");
+      const errBox = document.getElementById("error-msg");
+  
+      const id = idInput.value.trim();
+      const pw = pwInput.value.trim();
+  
+      // 디버깅용 콘솔 출력
+      console.log("🔑 입력값 → ID:", id, "PW:", pw);
+  
+      if (!id || !pw) {
+        errBox.textContent = "아이디와 비밀번호를 모두 입력해주세요.";
+        return;
+      }
+  
+      const payload = {
+        username: id,
+        password: pw
+      };
+  
+      console.log("📦 보내는 데이터:", JSON.stringify(payload));
+  
+      try {
+        const res = await fetch("/php/admin-login.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify(payload)
+        });
+  
+        const data = await res.json();
+        console.log("📬 서버 응답:", data); // 디버깅용 응답 확인
+  
+        if (data.success) {
+          location.href = "/html/admin-main.html"; // 로그인 성공 시 이동할 페이지
+        } else {
+          errBox.textContent = data.message || "로그인에 실패했습니다.";
+        }
+  
+      } catch (e) {
+        console.error("❌ 로그인 요청 실패:", e);
+        errBox.textContent = "서버 연결 오류가 발생했습니다.";
+      }
+    });
+  </script>
+  
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>매점 완료</title>
+  <link rel="stylesheet" href="/css/buying.css">
+</head>
+<body>
+  <div id="header"></div>
+  <script src="/js/init-header.js"></script>
+  <div class="content-box">
+    <div class="content-inner">
+      <h2 class="complete-title">구매가 완료되었습니다</h2>
+  
+      <div class="receipt-wrapper">
+
+        <!-- ✅ 회사 정보 -->
+        <div class="company-info">
+          <strong>FILM FRAME CINEMA</strong>
+          서울특별시 강남구 신사동 123-45  
+          <br>Tel: 02-123-4567
+        </div>
+        
+      
+        <!-- ✅ 위쪽 구분선 -->
+        <div class="receipt-line-separator"></div>
+      
+        <!-- ✅ 본문 내용 -->
+        <div class="receipt-body">
+          <div class="line"><strong>상품:</strong> <span id="product-name"></span></div>
+          <div class="line"><strong>총금액:</strong> <span id="total-price"></span></div>
+          <div class="line"><strong>결제수단:</strong> <span id="payment-method"></span></div>
+          <div class="line"><strong>수량:</strong> <span id="quantity"></span></div>
+        </div>
+        
+      
+        <!-- ✅ 아래 구분선 -->
+        <div class="receipt-line-separator"></div>
+      
+        <!-- ✅ 덕담 메시지 -->
+        <div class="receipt-message">구매해주셔서 감사합니다(•̀ᴗ-)✧</div>
+      
+        <!-- ✅ 바코드 -->
+        <div class="receipt-barcode">
+          <img src="/img/barcode.png" class="barcode-image" alt="바코드">
+        </div>
+      </div>  
+      <!-- ✅ 이 위치가 올바름 -->
+  <button class="back-button" onclick="location.href='main.html'">메인으로 돌아가기</button>    
+    </div>
+  </div>  
+    </div>
+  </div>  
+</body>
+<script src="/js/buying.js"></script>
+</html>

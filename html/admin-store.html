@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>매점 관리</title>
+  <link rel="stylesheet" href="/css/admin-store.css"> <!-- ✅ CSS 직접 포함 -->
+  <script defer src="/js/admin-store.js"></script>     <!-- ✅ JS 직접 포함 -->
+</head>
+<body>
+  <!-- 메인 콘텐츠 -->
+  <div class="main-content">
+    <h1>매점 관리</h1>
+    <div class="breadcrumb">관리자 페이지 / 매점 관리</div>
+
+    <!-- 등록폼 -->
+    <form id="storeForm" action="../php/store-insert.php" method="post" enctype="multipart/form-data">
+      <div class="form-group">
+        <label for="product-image">상품 이미지 업로드</label>
+        <input type="file" id="product-image" name="product-image" accept="image/*">
+        <img id="image-preview" src="#" alt="이미지 미리보기" style="display: none;">
+      </div>
+
+      <div class="form-group">
+        <label for="product-name">상품명</label>
+        <input type="text" id="product-name" name="product-name" required>
+      </div>
+
+      <div class="form-group">
+        <label for="price">가격 (₩)</label>
+        <input type="number" id="price" name="price" required>
+      </div>
+
+      <div class="form-group">
+        <label for="components">구성품</label>
+        <input type="text" id="components" name="components" required>
+      </div>
+
+      <div class="form-group">
+        <label for="purchase-limit">구매 제한 (1회 최대 수량)</label>
+        <input type="number" id="purchase-limit" name="purchase-limit" required>
+      </div>
+
+      <div class="form-group">
+        <label for="validity">유효기간</label>
+        <input type="date" id="validity" name="validity" required>
+      </div>
+
+      <div class="form-group">
+        <button type="submit">등록</button>
+      </div>
+    </form>
+
+    <!-- 등록된 상품 목록 -->
+    <div class="product-list">
+      <h2>등록된 상품</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>상품 이미지</th>
+            <th>상품명</th>
+            <th>가격 (₩)</th>
+            <th>구성품</th>
+            <th>구매제한</th>
+            <th>유효기간</th>
+            <th>액션</th>
+          </tr>
+        </thead>
+        <tbody id="productTable">
+          <!-- 자바스크립트를 통해 내용이 추가됩니다 -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>

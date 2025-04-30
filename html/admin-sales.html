@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>매출 및 통계</title>
+</head>
+<body>
+    <div class="main-content">
+        <h1>매출 및 통계</h1>
+
+        <div class="breadcrumb">관리자 페이지 / 매출 및 통계</div>
+
+        <div class="stats" id="statsContainer">
+            <h2>요약 통계</h2>
+            <table class="stats-table">
+                <tr>
+                    <th>총 매출</th>
+                    <td id="totalSales">₩0</td>
+                </tr>
+                <tr>
+                    <th>일일 매출</th>
+                    <td id="avgSales">₩0</td>
+                </tr>
+            </table>
+
+            <div class="quarter-selector">
+                <label for="quarterSelect">분기 선택: </label>
+                <select id="quarterSelect">
+                    <option value="1">1분기</option>
+                    <option value="2">2분기</option>
+                    <option value="3">3분기</option>
+                    <option value="4">4분기</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- 인기 영화 섹션 -->
+        <div class="movie-stats">
+            <h2>인기 영화</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>순위</th>
+                        <th>제목</th>
+                        <th>예매 수</th>
+                    </tr>
+                </thead>
+                <tbody id="movieStats">
+                    <!-- 인기 영화 목록이 이곳에 표시됩니다 -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 인기 음식 섹션 -->
+        <div class="food-stats">
+            <h2>인기 음식</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>순위</th>
+                        <th>이름</th>
+                        <th>판매 수</th>
+                    </tr>
+                </thead>
+                <tbody id="foodStats">
+                    <!-- 인기 음식 목록이 이곳에 표시됩니다 -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="/js/admin-sales.js" defer></script> <!-- ✅ JS는 한 번만 -->
+</body>
+</html>

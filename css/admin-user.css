@@ -1,0 +1,89 @@
+
+        h2 {
+            text-align: center;
+        }
+        /* ✅ 메인 콘텐츠 */
+        .main-content {
+            flex-grow: 1;
+            padding: 40px;
+            background-color: #f9f9f9;
+        }
+        
+        h1 {
+            font-size: 24px;
+        }
+        
+        .breadcrumb {
+            color: gray;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        
+        .search-bar {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        
+        .search-bar input {
+            width: 300px;
+            padding: 8px;
+            font-size: 14px;
+        }
+        
+        .search-bar button {
+            background-color: black;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+            background-color: white;
+        }
+        
+        table th, table td {
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+        
+        table th {
+            background-color: #f2f2f2;
+        }
+        
+        /* 상세 내역용 스타일 */
+    #purchaseDetails {
+        margin-top: 80px; /* 기존보다 살짝만 늘림 */
+}
+
+    
+#purchaseDetails h2 {
+    text-align: left;
+    font-size: 24px;
+    margin-bottom: 10px;
+    margin-top: 60px;
+}
+
+    
+    #purchaseDetails table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: white;
+    }
+    
+    #purchaseDetails th, #purchaseDetails td {
+        border: 1px solid #ccc;
+        padding: 10px;
+        text-align: center;
+    }
+    
+    .clickable {
+        cursor: pointer;
+        color: blue;
+        text-decoration: underline;
+    }
+    

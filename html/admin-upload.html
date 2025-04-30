@@ -1,0 +1,109 @@
+
+    <div class="content">
+        <h2>영화 등록</h2>
+        <div class="form-container">
+            <div class="top-section">
+                <div class="poster-upload" onclick="document.getElementById('posterInput').click();">
+                    <span id="posterText">포스터 등록</span>
+                    <input type="file" id="posterInput" accept="image/*" style="display:none" onchange="previewPoster(event)">
+                </div>                
+                <div class="info-section">
+                    <input type="text" id="title" placeholder="영화 제목">
+                    <input type="text" id="director" placeholder="감독">
+                    <input type="text" id="actors" placeholder="출연진 (쉼표로 구분)">
+                    <input type="text" id="duration" placeholder="상영 시간 (예: 2시간)">
+                    <textarea id="reviews" placeholder="상세정보" style="height: 80px;"></textarea>
+                    <textarea id="description" placeholder="이미지 hover 시 나올 내용" style="height: 150px;"></textarea>
+
+                    <!-- ✅ 상영 시작일과 종료일 -->
+                    <div class="date-select-row">
+                        <label for="startDate">상영 시작일:</label>
+                        <input type="date" id="startDate">
+
+                        <label for="endDate" style="margin-left: 20px;">상영 종료일:</label>
+                        <input type="date" id="endDate">
+                    </div>
+
+
+                    <!-- ✅ 다중 선택 가능한 영화관 선택 -->
+                    <!-- 영화관 선택 + 추가 버튼 -->
+                    <div class="cinema-select-row">
+                        <select id="cinemaDropdown">
+                            <option value="">영화관 선택</option>
+                            <optgroup label="서울">
+                              <option value="1">FF 시네마 서울 강남</option>
+                              <option value="2">FF 시네마 서울 홍대</option>
+                              <option value="3">FF 시네마 서울 종로</option>
+                            </optgroup>
+                            <optgroup label="부산">
+                              <option value="4">FF 시네마 부산 해운대</option>
+                              <option value="5">FF 시네마 부산 서면</option>
+                            </optgroup>
+                            <optgroup label="대구">
+                              <option value="6">FF 시네마 대구 동성로</option>
+                            </optgroup>
+                            <optgroup label="경기">
+                              <option value="7">FF 시네마 수원 영통</option>
+                              <option value="8">FF 시네마 고양 스타필드</option>
+                              <option value="9">FF 시네마 성남 판교</option>
+                              <option value="10">FF 시네마 평택 비전동</option>
+                            </optgroup>
+                            <optgroup label="기타">
+                              <option value="11">FF 시네마 인천 송도</option>
+                              <option value="12">FF 시네마 청주 성안길</option>
+                              <option value="13">FF 시네마 전주 한옥마을</option>
+                              <option value="14">FF 시네마 광주 충장로</option>
+                              <option value="15">FF 시네마 울산 삼산</option>
+                              <option value="16">FF 시네마 창원 상남동</option>
+                              <option value="17">FF 시네마 강릉 경포대</option>
+                              <option value="18">FF 시네마 제주 노형</option>
+                              <option value="19">FF 시네마 김해 외동</option>
+                              <option value="20">FF 시네마 포항 죽도</option>
+                            </optgroup>
+                          </select>                          
+                        <button id="cinemaAddBtn" onclick="addCinema()">추가</button>
+                    </div>
+                    
+                    <!-- 태그 표시 영역 -->
+                    <div id="cinemaTags"></div>
+  
+                      <!-- ✅ 상영 시간 입력 -->
+                    <!-- ✅ 상영 날짜 및 시간 입력 -->
+                    <div class="datetime-select-row">
+                        <label>상영 날짜:</label>
+                        <input type="date" id="showDateInput">
+                    
+                        <label style="margin-left: 20px;">상영 시간:</label>
+                        <input type="time" id="showTimeInput">
+                    
+                        <button type="button" onclick="addShowDatetime()">추가</button>
+                    </div>
+                    
+                    <!-- ✅ 추가된 날짜/시간 목록 -->
+                    <div id="showDatetimeTags" style="margin-top: 10px;"></div>
+                    
+                    
+                    <!-- ✅ 추가된 시간 표시 -->
+                    <div id="showTimeTags" style="margin-top: 10px;"></div>
+                    
+                    <!-- ✅ 명대사 입력란 추가 -->
+                    <label for="quote">명대사</label>
+                    <textarea name="quote" id="quote" placeholder="명대사를 입력하세요..." rows="3"></textarea>
+                    <!-- 결과 메시지를 보여줄 영역 -->
+                    <div id="result-message" style="margin-top: 10px;"></div>
+
+
+                    <button type="button" onclick="previewQuote()">저장</button>
+                    <label>성인 요금</label>
+                    <input type="number" id="adultPrice" required>
+
+                    <label>청소년 요금</label>
+                    <input type="number" id="teenPrice" required>
+
+                    <button class="btn" onclick="handleUpload()">등록하기</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+

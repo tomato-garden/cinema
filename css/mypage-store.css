@@ -1,0 +1,131 @@
+/* 구매 내역 상자 스타일 */
+#boxes-container .purchase-box {
+    border: 1px solid #8f8e8e;
+    border-radius: 8px;
+    padding: 0px 20px 0px 20px;
+    background-color: #fff;
+    width: 800px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    font-size: 14px;
+    line-height: 1.7;
+    margin: 12px auto;
+    cursor: pointer;
+    text-align: left;
+
+    /* 텍스트 왼쪽 정렬 */
+    text-align: left;
+
+    /* 화면을 넘지 않도록 수정 */
+    max-width: 100%;
+}
+
+
+/* 페이지네이션 스타일 */
+#pagination {
+    margin-top: 20px;
+    text-align: center;
+}
+
+#pagination span {
+    cursor: pointer;
+    margin: 0 5px;
+}
+
+#pagination .active {
+    font-weight: bold;
+    color: blue;
+}
+
+/* 매점 내역 모달 스타일 */
+#store-modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* 모달 콘텐츠 스타일 */
+#store-modal-content.content-box {
+    background: #fff;
+    width: 700px;
+    padding: 20px;
+    border-radius: 10px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    
+}
+
+.content-inner {
+    position: relative;
+}
+
+.complete-title {
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 24px;
+}
+
+.receipt-wrapper {
+    padding: 10px;
+    background: white;
+    border-radius: 6px;
+    text-align: left;
+}
+
+.company-info {
+    font-size: 14px;
+    margin-bottom: 10px;
+    text-align: left;
+    line-height: 20px;
+}
+
+.receipt-line-separator {
+    height: 1px;
+    background-color: #000;
+    margin: 20px 0;
+}
+
+.receipt-body .line {
+    margin: 5px 0;
+    font-size: 15px;
+    line-height: 20px;
+}
+
+.receipt-message {
+    margin: 12px 0;
+    font-size: 14px;
+    text-align: center;
+}
+
+.receipt-barcode .barcode-image {
+    display: block;
+    margin: 0 auto;
+    max-width: 200px;
+    width: 100%;
+}
+
+/* 닫기 버튼 스타일 */
+#closeStoreModal.back-button {
+    align-self: center;
+    padding: 8px 16px;
+    border: none;
+    background-color: #000;
+    color: #fff;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.section-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: left;
+  }
+  

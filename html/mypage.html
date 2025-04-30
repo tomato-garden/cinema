@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>마이페이지</title>
+  <link rel="stylesheet" href="/css/mypage.css" />
+</head>
+<body>
+  <div id="header"></div>
+  <script src="/js/init-header.js"></script>
+
+  <div class="center-box">
+    <!-- 왼쪽 메뉴 -->
+    <div class="left-menu">
+      <button onclick="navigateTo('account')">계정 정보</button>
+      <button onclick="navigateTo('booking')">예매 내역</button>
+      <button onclick="navigateTo('purchase')">매점 내역</button>
+    </div>
+    
+
+    <!-- 오른쪽 콘텐츠 -->
+    <div class="right-content" id="content"></div>
+  </div>
+
+  <!-- 동적 콘텐츠 로딩 JS -->
+  <script src="/js/mypage.js"></script>
+</body>
+</html>

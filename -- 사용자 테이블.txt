@@ -1,0 +1,909 @@
+create DATABASE movie;
+use movie;
+
+-- 사용자 테이블
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(30) NOT NULL UNIQUE,      -- 아이디
+    name VARCHAR(50) NOT NULL,                 -- 이름
+    phone VARCHAR(13) NOT NULL UNIQUE,         -- 전화번호 (하이픈 포함)
+    password VARCHAR(255) NOT NULL,            -- 비밀번호 (암호화된 형태)
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 사용자 점수 필드 추가
+ALTER TABLE users
+ADD store_score INT DEFAULT 0,
+ADD cinema_score INT DEFAULT 0;
+ALTER TABLE users ADD COLUMN is_admin TINYINT(1) DEFAULT 0;
+
+UPDATE users SET is_admin = 1 WHERE username = 'admin';
+
+
+-- 공지사항 테이블
+CREATE TABLE notices (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    author VARCHAR(100) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    views INT DEFAULT 0
+);
+
+-- DB 사용자 비밀번호 변경 (예시, 실제 비밀번호로 변경 필요)
+ALTER USER 'db_user'@'localhost' IDENTIFIED WITH mysql_native_password BY '비밀번호';
+FLUSH PRIVILEGES;
+
+-- 상점 아이템 테이블
+CREATE TABLE store_items (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    price INT NOT NULL,
+    components TEXT NOT NULL,
+    purchase_limit INT NOT NULL,
+    validity DATE NOT NULL,
+    image_path VARCHAR(255)  -- 이미지 파일 경로 저장
+);
+
+-- 영화 테이블
+CREATE TABLE movies (
+    movie_id INT AUTO_INCREMENT PRIMARY KEY,       -- 영화 고유 ID
+    title VARCHAR(255) NOT NULL,                   -- 제목
+    description TEXT NOT NULL,                     -- 줄거리
+    start_date DATE,                               -- 상영 시작일
+    end_date DATE,                                 -- 상영 종료일
+    director VARCHAR(255),                         -- 감독
+    actors TEXT,                                   -- 출연진
+    duration VARCHAR(50),                          -- 상영시간 (예: 120분)
+    reviews TEXT,                                  -- 리뷰 또는 요약
+    likes INT DEFAULT 0,                           -- 관심 수
+    poster_path VARCHAR(255),                      -- 포스터 경로
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 영화 테이블에 명대사 컬럼 추가
+ALTER TABLE movies ADD quote TEXT;
+
+-- 영화관 테이블
+CREATE TABLE cinemas (
+    cinema_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,     -- 영화관 이름
+    region VARCHAR(50) NOT NULL,    -- 지역 (예: 서울, 부산 등)
+    address VARCHAR(255),
+    contact VARCHAR(20),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 영화-영화관 연결 테이블
+CREATE TABLE movie_cinemas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    movie_id INT NOT NULL,
+    cinema_id INT NOT NULL,
+    FOREIGN KEY (movie_id) REFERENCES movies(movie_id) ON DELETE CASCADE,
+    FOREIGN KEY (cinema_id) REFERENCES cinemas(cinema_id) ON DELETE CASCADE
+);
+
+-- 영화 상영 일정 테이블
+CREATE TABLE movie_showtimes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    movie_id INT NOT NULL,
+    cinema_id INT NOT NULL,
+    show_date DATE NOT NULL,       -- 날짜
+    show_time TIME NOT NULL,       -- 상영 시간
+    FOREIGN KEY (movie_id) REFERENCES movies(movie_id) ON DELETE CASCADE,
+    FOREIGN KEY (cinema_id) REFERENCES cinemas(cinema_id) ON DELETE CASCADE
+);
+
+CREATE TABLE reviews (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    movie_id INT NOT NULL,
+    user_id INT NOT NULL,
+    content TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (movie_id) REFERENCES movies(movie_id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+
+ALTER DATABASE movie CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+ALTER TABLE users CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+ALTER TABLE notices CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+
+ALTER TABLE store_items CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+ALTER TABLE  cinemas CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+ALTER TABLE  movies CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+
+ALTER TABLE  movie_cinemas CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+ALTER TABLE  reviews CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+CREATE TABLE movie_likes (
+    like_id INT AUTO_INCREMENT PRIMARY KEY,           -- 고유 ID
+    movie_id INT NOT NULL,                             -- 영화 ID
+    user_id INT NOT NULL,                             -- 사용자 ID
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,   -- 좋아요 생성 시간
+    FOREIGN KEY (movie_id) REFERENCES movies(movie_id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    CONSTRAINT unique_movie_user UNIQUE (movie_id, user_id)  -- 동일한 영화에 대해 같은 사용자가 여러 번 좋아요를 누를 수 없게 제약 추가
+);
+
+CREATE TABLE reservations (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    movie_id INT NOT NULL,
+    cinema_id INT NOT NULL,
+    show_date DATE NOT NULL,
+    show_time TIME NOT NULL,
+    seat_code VARCHAR(10) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (movie_id) REFERENCES movies(movie_id) ON DELETE CASCADE,
+    FOREIGN KEY (cinema_id) REFERENCES cinemas(cinema_id) ON DELETE CASCADE
+);
+
+ALTER TABLE reservations MODIFY seat_code VARCHAR(50);
+
+ALTER TABLE reservations
+ADD COLUMN reservation_id VARCHAR(50) NOT NULL AFTER id;
+
+ALTER TABLE reservations
+ADD COLUMN price DECIMAL(10,2) NOT NULL AFTER seat_code;
+
+ALTER TABLE reservations
+ADD COLUMN teen INT DEFAULT 0,
+ADD COLUMN adult INT DEFAULT 0,
+ADD COLUMN total_price INT DEFAULT 0;
+
+ALTER TABLE movies
+ADD COLUMN adult_price INT DEFAULT 0,
+ADD COLUMN teen_price INT DEFAULT 0;
+
+
+ALTER TABLE reservations
+ADD COLUMN payment_status ENUM('paid', 'pending', 'cancelled') DEFAULT 'paid';
+
+
+CREATE TABLE purchases (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    order_id VARCHAR(20) NOT NULL UNIQUE, -- 주문번호 (#ORD45551300 등)
+    user_id VARCHAR(50) NOT NULL,
+    product_type VARCHAR(20) NOT NULL,
+    name TEXT NOT NULL,
+    price INT NOT NULL,
+    quantity INT NOT NULL,
+    location VARCHAR(100),
+    date DATETIME NOT NULL
+);
+
+ALTER TABLE reviews ADD COLUMN updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+
+
+
+INSERT INTO cinemas (name, region, address, contact) VALUES
+('FF 시네마 서울 강남', '서울', '서울시 강남구 테헤란로 152', '02-1234-5678'),
+('FF 시네마 서울 홍대', '서울', '서울시 마포구 양화로 45', '02-2345-6789'),
+('FF 시네마 서울 종로', '서울', '서울시 종로구 종로 123', '02-3456-7890'),
+('FF 시네마 부산 해운대', '부산', '부산시 해운대구 해운대로 321', '051-111-2222'),
+('FF 시네마 부산 서면', '부산', '부산시 부산진구 중앙대로 666', '051-333-4444'),
+('FF 시네마 대구 동성로', '대구', '대구시 중구 동성로2가 45', '053-123-4567'),
+('FF 시네마 인천 송도', '인천', '인천시 연수구 송도국제대로 100', '032-789-4561'),
+('FF 시네마 수원 영통', '경기', '경기도 수원시 영통구 봉영로 225', '031-345-6789'),
+('FF 시네마 고양 스타필드', '경기', '경기도 고양시 덕양구 동산로 60', '031-987-6543'),
+('FF 시네마 성남 판교', '경기', '경기도 성남시 분당구 판교역로 235', '031-444-5555'),
+('FF 시네마 청주 성안길', '충북', '충북 청주시 상당구 상당로 55', '043-333-2222'),
+('FF 시네마 전주 한옥마을', '전북', '전북 전주시 완산구 풍남문2길 23', '063-111-2222'),
+('FF 시네마 광주 충장로', '광주', '광주시 동구 충장로 88', '062-333-4444'),
+('FF 시네마 울산 삼산', '울산', '울산시 남구 삼산로 310', '052-777-8888'),
+('FF 시네마 창원 상남동', '경남', '경남 창원시 성산구 상남로 90', '055-999-0000'),
+('FF 시네마 강릉 경포대', '강원', '강원도 강릉시 해안로 123', '033-123-4321'),
+('FF 시네마 평택 비전동', '경기', '경기도 평택시 비전2로 21', '031-678-1234'),
+('FF 시네마 제주 노형', '제주', '제주시 노형로 155', '064-456-7890'),
+('FF 시네마 김해 외동', '경남', '경남 김해시 외동로 18', '055-222-3333'),
+('FF 시네마 포항 죽도', '경북', '경북 포항시 북구 죽도시장길 9', '054-789-1234');
+
+INSERT INTO movies (title, director, actors, description, start_date, end_date, duration, reviews, quote, poster_path, adult_price, teen_price)
+VALUES ('해피엔드', '소라 네오', '쿠리하라 하야토, 히다카 유키토, 하야시 유타, 시나 펭, 아라지', '해피엔드는 강렬한 스토리와 감정을 담은 작품입니다.', '2025-04-23', '2025-05-23', '2시간', '해피엔드는 관객에게 깊은 인상을 남깁니다.', '“우린 아무것도 아니지만, 노래할 수 있다는 것만으로 충분해.”', '/img/movie-poster/해피엔드.jpg', 50000, 35000);
+
+INSERT INTO movies (title, director, actors, description, start_date, end_date, duration, reviews, quote, poster_path, adult_price, teen_price)
+VALUES ('자전거 탄 소년', '뤽 다르덴, 장 피에르 다르덴', '세실 드 프랑스, 토마 도레', '자전거 탄 소년는 강렬한 스토리와 감정을 담은 작품입니다.', '2025-04-23', '2025-05-23', '2시간', '자전거 탄 소년는 관객에게 깊은 인상을 남깁니다.', '“이 꿈이 끝나지 않기를.”', '/img/movie-poster/자전거탄소년.jpg', 50000, 35000);
+
+INSERT INTO movies (title, director, actors, description, start_date, end_date, duration, reviews, quote, poster_path, adult_price, teen_price)
+VALUES ('브리짓 존스의 일기', '마이클 모리스', '르네 젤위거, 휴 그랜트, 엠마 톰슨, 치웨텔 에지오포, 레오 우달', '브리짓 존스의 일기는 강렬한 스토리와 감정을 담은 작품입니다.', '2025-04-23', '2025-05-23', '2시간', '브리짓 존스의 일기는 관객에게 깊은 인상을 남깁니다.', '“그 마지막 한 걸음을 위해 달려왔다.”', '/img/movie-poster/브리짓존스의일기.jpg', 50000, 35000);
+
+INSERT INTO movies (title, director, actors, description, start_date, end_date, duration, reviews, quote, poster_path, adult_price, teen_price)
+VALUES ('라스트 마일', '츠카하라 아유코', '미츠시마 히카리, 오카다 마사키, 이시하라 사토미, 아야노 고, 호시노 겐', '라스트 마일는 강렬한 스토리와 감정을 담은 작품입니다.', '2025-04-23', '2025-05-23', '2시간', '라스트 마일는 관객에게 깊은 인상을 남깁니다.', '“비가 와도 너만 있다면 괜찮아.”', '/img/movie-poster/라스트마일.jpg', 50000, 35000);
+
+INSERT INTO movies (title, director, actors, description, start_date, end_date, duration, reviews, quote, poster_path, adult_price, teen_price)
+VALUES ('위키드', '존 추', '아리아나 그란데, 신시아 에리보, 조나단 베일리, 에단 슬레이터, 양자경, 제프 골드브럼', '위키드는 강렬한 스토리와 감정을 담은 작품입니다.', '2025-04-23', '2025-05-23', '2시간', '위키드는 관객에게 깊은 인상을 남깁니다.', '“신이 모든 걸 가져가도, 나만은 잊지 말아줘.”', '/img/movie-poster/위키드.jpg', 50000, 35000);
+
+INSERT INTO movies (title, director, actors, description, start_date, end_date, duration, reviews, quote, poster_path, adult_price, teen_price)
+VALUES ('라라랜드', '데이미언 셔젤', '엠마 스톤, 라이언 고슬링, 핀 위트록, J.K. 시몬스', '라라랜드는 강렬한 스토리와 감정을 담은 작품입니다.', '2025-05-10', '2025-05-26', '2시간', '라라랜드는 관객에게 깊은 인상을 남깁니다.', '“우리는 서로를 지키기 위해 싸운다.”', '/img/movie-poster/라라랜드.jpg', 50000, 35000);
+
+INSERT INTO movies (title, director, actors, description, start_date, end_date, duration, reviews, quote, poster_path, adult_price, teen_price)
+VALUES ('어른 김장하', '김현지', '김주완, 김장하', '어른 김장하는 강렬한 스토리와 감정을 담은 작품입니다.', '2025-05-23', '2025-06-15', '2시간', '어른 김장하는 관객에게 깊은 인상을 남깁니다.', '“운명은 쓰여진 게 아니라, 내가 쓰는 거야.”', '/img/movie-poster/어른김장하.jpg', 50000, 35000);
+
+INSERT INTO movies (title, director, actors, description, start_date, end_date, duration, reviews, quote, poster_path, adult_price, teen_price)
+VALUES ('레이니 데이 인 뉴욕', '우디 앨런', '티모시 샬라메, 엘르 패닝, 셀레나 고메즈, 주드 로, 디에고 루나, 리브 슈라이버', '레이니 데이 인 뉴욕는 강렬한 스토리와 감정을 담은 작품입니다.', '2025-05-15', '2025-06-08', '2시간', '레이니 데이 인 뉴욕는 관객에게 깊은 인상을 남깁니다.', '“승부는 끝날 때까지 끝난 게 아니다.”', '/img/movie-poster/레이니데이인뉴욕.jpg', 50000, 35000);
+
+INSERT INTO movies (title, director, actors, description, start_date, end_date, duration, reviews, quote, poster_path, adult_price, teen_price)
+VALUES ('이제 다시 시작하려고 해', '호나스 트루에바', '잇사소 아라나', '이제 다시 시작하려고 해는 강렬한 스토리와 감정을 담은 작품입니다.', '2025-07-16', '2025-08-06', '2시간', '이제 다시 시작하려고 해는 관객에게 깊은 인상을 남깁니다.', '“정의는 침묵하지 않는다.”', '/img/movie-poster/이제다시시작하려고해.jpg', 50000, 35000);
+
+INSERT INTO movies (title, director, actors, description, start_date, end_date, duration, reviews, quote, poster_path, adult_price, teen_price)
+VALUES ('너의 새는 노래할 수 있어', '미야케 쇼', '에모토 타스쿠, 이시바시 시즈카, 소메타니 쇼타', '너의 새는 노래할 수 있어는 강렬한 스토리와 감정을 담은 작품입니다.', '2025-06-28', '2025-07-08', '2시간', '너의 새는 노래할 수 있어는 관객에게 깊은 인상을 남깁니다.', '“어른이 된다는 건, 잊지 않는 법을 배우는 거야.”', '/img/movie-poster/너의새는노래할수있어.jpg', 50000, 35000);
+
+INSERT INTO movies (title, director, actors, description, start_date, end_date, duration, reviews, quote, poster_path, adult_price, teen_price)
+VALUES ('승부', '황병국', '강하늘, 유해진, 박해준, 류경수, 채원빈', '승부는 강렬한 스토리와 감정을 담은 작품입니다.', '2025-05-11', '2025-05-23', '2시간', '승부는 관객에게 깊은 인상을 남깁니다.', '“마법은 마음 속에 있다.”', '/img/movie-poster/승부.jpg', 50000, 35000);
+
+INSERT INTO movies (title, director, actors, description, start_date, end_date, duration, reviews, quote, poster_path, adult_price, teen_price)
+VALUES ('파과', '민규동', '이혜영, 김성철, 연우진, 김무열, 신시아', '파과는 강렬한 스토리와 감정을 담은 작품입니다.', '2025-05-01', '2025-05-24', '2시간', '파과는 관객에게 깊은 인상을 남깁니다.', '“다시 시작하는 데 늦은 때란 없어.”', '/img/movie-poster/파과.jpg', 50000, 35000);
+
+INSERT INTO movies (title, director, actors, description, start_date, end_date, duration, reviews, quote, poster_path, adult_price, teen_price)
+VALUES ('바이러스', '강이관', '배두나, 김윤석, 장기하, 손석구', '바이러스는 강렬한 스토리와 감정을 담은 작품입니다.', '2025-05-30', '2025-06-16', '2시간', '바이러스는 관객에게 깊은 인상을 남깁니다.', '“가장 작은 바퀴가 가장 멀리 간다.”', '/img/movie-poster/바이러스.jpg', 50000, 35000);
+
+INSERT INTO movies (title, director, actors, description, start_date, end_date, duration, reviews, quote, poster_path, adult_price, teen_price)
+VALUES ('승부', '김형주', '이병헌, 유아인, 고창석, 현봉식, 문정희, 김강훈, 조우진', '승부는 강렬한 스토리와 감정을 담은 작품입니다.', '2025-05-05', '2025-05-15', '2시간', '승부는 관객에게 깊은 인상을 남깁니다.', '“진실은 어둠 속에서도 빛난다.”', '/img/movie-poster/승부.jpg', 50000, 35000);
+
+INSERT INTO movies (title, director, actors, description, start_date, end_date, duration, reviews, quote, poster_path, adult_price, teen_price)
+VALUES ('콘클라베', '에드워드 버거', '랄프 파인즈, 스탠리 투치, 존 리스고, 이사벨라 로셀리니', '콘클라베는 강렬한 스토리와 감정을 담은 작품입니다.', '2025-05-19', '2025-06-04', '2시간', '콘클라베는 관객에게 깊은 인상을 남깁니다.', '“고통의 끝은, 존재의 깊이다.”', '/img/movie-poster/콘클라베.jpg', 50000, 35000);
+
+INSERT INTO movies (title, director, actors, description, start_date, end_date, duration, reviews, quote, poster_path, adult_price, teen_price)
+VALUES ('마리아', '파블로 라라인', '안젤리나 졸리, 피에르프란체스코 파비노, 알바 로르와처', '마리아는 강렬한 스토리와 감정을 담은 작품입니다.', '2025-05-08', '2025-05-20', '2시간', '마리아는 관객에게 깊은 인상을 남깁니다.', '“흐름을 거스를 수 없다면, 그 안에 녹아라.”', '/img/movie-poster/마리아.jpg', 50000, 35000);
+
+INSERT INTO movies (title, director, actors, description, start_date, end_date, duration, reviews, quote, poster_path, adult_price, teen_price)
+VALUES ('플로우', '긴츠 질발로디스', 'X', '플로우는 강렬한 스토리와 감정을 담은 작품입니다.', '2025-06-13', '2025-06-29', '2시간', '플로우는 관객에게 깊은 인상을 남깁니다.', '“끝은 또 다른 시작일지도 몰라.”', '/img/movie-poster/플로우.jpg', 50000, 35000);
+
+-- movie_cinemas 데이터 입력
+INSERT INTO movie_cinemas (movie_id, cinema_id) VALUES (1, 4);
+INSERT INTO movie_cinemas (movie_id, cinema_id) VALUES (1, 5);
+INSERT INTO movie_cinemas (movie_id, cinema_id) VALUES (2, 4);
+INSERT INTO movie_cinemas (movie_id, cinema_id) VALUES (2, 5);
+INSERT INTO movie_cinemas (movie_id, cinema_id) VALUES (3, 4);
+INSERT INTO movie_cinemas (movie_id, cinema_id) VALUES (3, 5);
+INSERT INTO movie_cinemas (movie_id, cinema_id) VALUES (4, 4);
+INSERT INTO movie_cinemas (movie_id, cinema_id) VALUES (4, 5);
+INSERT INTO movie_cinemas (movie_id, cinema_id) VALUES (5, 4);
+INSERT INTO movie_cinemas (movie_id, cinema_id) VALUES (5, 5);
+INSERT INTO movie_cinemas (movie_id, cinema_id) VALUES (6, 4);
+INSERT INTO movie_cinemas (movie_id, cinema_id) VALUES (6, 5);
+INSERT INTO movie_cinemas (movie_id, cinema_id) VALUES (7, 4);
+INSERT INTO movie_cinemas (movie_id, cinema_id) VALUES (7, 5);
+INSERT INTO movie_cinemas (movie_id, cinema_id) VALUES (8, 4);
+INSERT INTO movie_cinemas (movie_id, cinema_id) VALUES (8, 5);
+INSERT INTO movie_cinemas (movie_id, cinema_id) VALUES (9, 4);
+INSERT INTO movie_cinemas (movie_id, cinema_id) VALUES (9, 5);
+INSERT INTO movie_cinemas (movie_id, cinema_id) VALUES (10, 4);
+INSERT INTO movie_cinemas (movie_id, cinema_id) VALUES (10, 5);
+INSERT INTO movie_cinemas (movie_id, cinema_id) VALUES (11, 4);
+INSERT INTO movie_cinemas (movie_id, cinema_id) VALUES (11, 5);
+INSERT INTO movie_cinemas (movie_id, cinema_id) VALUES (12, 4);
+INSERT INTO movie_cinemas (movie_id, cinema_id) VALUES (12, 5);
+INSERT INTO movie_cinemas (movie_id, cinema_id) VALUES (13, 4);
+INSERT INTO movie_cinemas (movie_id, cinema_id) VALUES (13, 5);
+INSERT INTO movie_cinemas (movie_id, cinema_id) VALUES (14, 4);
+INSERT INTO movie_cinemas (movie_id, cinema_id) VALUES (14, 5);
+INSERT INTO movie_cinemas (movie_id, cinema_id) VALUES (15, 4);
+INSERT INTO movie_cinemas (movie_id, cinema_id) VALUES (15, 5);
+INSERT INTO movie_cinemas (movie_id, cinema_id) VALUES (16, 4);
+INSERT INTO movie_cinemas (movie_id, cinema_id) VALUES (16, 5);
+INSERT INTO movie_cinemas (movie_id, cinema_id) VALUES (17, 4);
+INSERT INTO movie_cinemas (movie_id, cinema_id) VALUES (17, 5);
+
+-- movie_showtimes 데이터 입력
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (1, 4, '2025-04-29', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (1, 4, '2025-04-29', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (1, 4, '2025-04-29', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (1, 4, '2025-04-30', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (1, 4, '2025-04-30', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (1, 4, '2025-04-30', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (1, 4, '2025-05-01', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (1, 4, '2025-05-01', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (1, 4, '2025-05-01', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (1, 4, '2025-05-02', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (1, 4, '2025-05-02', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (1, 4, '2025-05-02', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (1, 4, '2025-05-03', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (1, 4, '2025-05-03', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (1, 4, '2025-05-03', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (1, 4, '2025-05-04', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (1, 4, '2025-05-04', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (1, 4, '2025-05-04', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (1, 5, '2025-04-29', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (1, 5, '2025-04-29', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (1, 5, '2025-04-29', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (1, 5, '2025-04-30', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (1, 5, '2025-04-30', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (1, 5, '2025-04-30', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (1, 5, '2025-05-01', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (1, 5, '2025-05-01', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (1, 5, '2025-05-01', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (1, 5, '2025-05-02', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (1, 5, '2025-05-02', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (1, 5, '2025-05-02', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (1, 5, '2025-05-03', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (1, 5, '2025-05-03', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (1, 5, '2025-05-03', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (1, 5, '2025-05-04', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (1, 5, '2025-05-04', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (1, 5, '2025-05-04', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (2, 4, '2025-04-29', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (2, 4, '2025-04-29', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (2, 4, '2025-04-29', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (2, 4, '2025-04-30', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (2, 4, '2025-04-30', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (2, 4, '2025-04-30', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (2, 4, '2025-05-01', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (2, 4, '2025-05-01', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (2, 4, '2025-05-01', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (2, 4, '2025-05-02', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (2, 4, '2025-05-02', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (2, 4, '2025-05-02', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (2, 4, '2025-05-03', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (2, 4, '2025-05-03', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (2, 4, '2025-05-03', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (2, 4, '2025-05-04', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (2, 4, '2025-05-04', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (2, 4, '2025-05-04', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (2, 5, '2025-04-29', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (2, 5, '2025-04-29', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (2, 5, '2025-04-29', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (2, 5, '2025-04-30', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (2, 5, '2025-04-30', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (2, 5, '2025-04-30', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (2, 5, '2025-05-01', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (2, 5, '2025-05-01', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (2, 5, '2025-05-01', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (2, 5, '2025-05-02', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (2, 5, '2025-05-02', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (2, 5, '2025-05-02', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (2, 5, '2025-05-03', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (2, 5, '2025-05-03', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (2, 5, '2025-05-03', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (2, 5, '2025-05-04', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (2, 5, '2025-05-04', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (2, 5, '2025-05-04', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (3, 4, '2025-04-29', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (3, 4, '2025-04-29', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (3, 4, '2025-04-29', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (3, 4, '2025-04-30', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (3, 4, '2025-04-30', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (3, 4, '2025-04-30', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (3, 4, '2025-05-01', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (3, 4, '2025-05-01', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (3, 4, '2025-05-01', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (3, 4, '2025-05-02', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (3, 4, '2025-05-02', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (3, 4, '2025-05-02', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (3, 4, '2025-05-03', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (3, 4, '2025-05-03', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (3, 4, '2025-05-03', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (3, 4, '2025-05-04', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (3, 4, '2025-05-04', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (3, 4, '2025-05-04', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (3, 5, '2025-04-29', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (3, 5, '2025-04-29', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (3, 5, '2025-04-29', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (3, 5, '2025-04-30', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (3, 5, '2025-04-30', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (3, 5, '2025-04-30', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (3, 5, '2025-05-01', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (3, 5, '2025-05-01', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (3, 5, '2025-05-01', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (3, 5, '2025-05-02', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (3, 5, '2025-05-02', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (3, 5, '2025-05-02', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (3, 5, '2025-05-03', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (3, 5, '2025-05-03', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (3, 5, '2025-05-03', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (3, 5, '2025-05-04', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (3, 5, '2025-05-04', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (3, 5, '2025-05-04', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (4, 4, '2025-04-29', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (4, 4, '2025-04-29', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (4, 4, '2025-04-29', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (4, 4, '2025-04-30', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (4, 4, '2025-04-30', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (4, 4, '2025-04-30', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (4, 4, '2025-05-01', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (4, 4, '2025-05-01', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (4, 4, '2025-05-01', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (4, 4, '2025-05-02', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (4, 4, '2025-05-02', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (4, 4, '2025-05-02', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (4, 4, '2025-05-03', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (4, 4, '2025-05-03', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (4, 4, '2025-05-03', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (4, 4, '2025-05-04', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (4, 4, '2025-05-04', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (4, 4, '2025-05-04', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (4, 5, '2025-04-29', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (4, 5, '2025-04-29', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (4, 5, '2025-04-29', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (4, 5, '2025-04-30', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (4, 5, '2025-04-30', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (4, 5, '2025-04-30', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (4, 5, '2025-05-01', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (4, 5, '2025-05-01', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (4, 5, '2025-05-01', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (4, 5, '2025-05-02', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (4, 5, '2025-05-02', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (4, 5, '2025-05-02', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (4, 5, '2025-05-03', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (4, 5, '2025-05-03', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (4, 5, '2025-05-03', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (4, 5, '2025-05-04', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (4, 5, '2025-05-04', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (4, 5, '2025-05-04', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (5, 4, '2025-04-29', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (5, 4, '2025-04-29', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (5, 4, '2025-04-29', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (5, 4, '2025-04-30', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (5, 4, '2025-04-30', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (5, 4, '2025-04-30', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (5, 4, '2025-05-01', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (5, 4, '2025-05-01', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (5, 4, '2025-05-01', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (5, 4, '2025-05-02', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (5, 4, '2025-05-02', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (5, 4, '2025-05-02', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (5, 4, '2025-05-03', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (5, 4, '2025-05-03', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (5, 4, '2025-05-03', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (5, 4, '2025-05-04', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (5, 4, '2025-05-04', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (5, 4, '2025-05-04', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (5, 5, '2025-04-29', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (5, 5, '2025-04-29', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (5, 5, '2025-04-29', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (5, 5, '2025-04-30', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (5, 5, '2025-04-30', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (5, 5, '2025-04-30', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (5, 5, '2025-05-01', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (5, 5, '2025-05-01', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (5, 5, '2025-05-01', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (5, 5, '2025-05-02', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (5, 5, '2025-05-02', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (5, 5, '2025-05-02', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (5, 5, '2025-05-03', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (5, 5, '2025-05-03', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (5, 5, '2025-05-03', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (5, 5, '2025-05-04', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (5, 5, '2025-05-04', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (5, 5, '2025-05-04', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (6, 4, '2025-04-29', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (6, 4, '2025-04-29', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (6, 4, '2025-04-29', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (6, 4, '2025-04-30', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (6, 4, '2025-04-30', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (6, 4, '2025-04-30', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (6, 4, '2025-05-01', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (6, 4, '2025-05-01', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (6, 4, '2025-05-01', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (6, 4, '2025-05-02', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (6, 4, '2025-05-02', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (6, 4, '2025-05-02', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (6, 4, '2025-05-03', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (6, 4, '2025-05-03', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (6, 4, '2025-05-03', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (6, 4, '2025-05-04', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (6, 4, '2025-05-04', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (6, 4, '2025-05-04', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (6, 5, '2025-04-29', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (6, 5, '2025-04-29', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (6, 5, '2025-04-29', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (6, 5, '2025-04-30', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (6, 5, '2025-04-30', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (6, 5, '2025-04-30', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (6, 5, '2025-05-01', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (6, 5, '2025-05-01', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (6, 5, '2025-05-01', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (6, 5, '2025-05-02', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (6, 5, '2025-05-02', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (6, 5, '2025-05-02', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (6, 5, '2025-05-03', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (6, 5, '2025-05-03', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (6, 5, '2025-05-03', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (6, 5, '2025-05-04', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (6, 5, '2025-05-04', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (6, 5, '2025-05-04', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (7, 4, '2025-04-29', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (7, 4, '2025-04-29', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (7, 4, '2025-04-29', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (7, 4, '2025-04-30', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (7, 4, '2025-04-30', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (7, 4, '2025-04-30', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (7, 4, '2025-05-01', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (7, 4, '2025-05-01', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (7, 4, '2025-05-01', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (7, 4, '2025-05-02', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (7, 4, '2025-05-02', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (7, 4, '2025-05-02', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (7, 4, '2025-05-03', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (7, 4, '2025-05-03', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (7, 4, '2025-05-03', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (7, 4, '2025-05-04', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (7, 4, '2025-05-04', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (7, 4, '2025-05-04', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (7, 5, '2025-04-29', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (7, 5, '2025-04-29', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (7, 5, '2025-04-29', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (7, 5, '2025-04-30', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (7, 5, '2025-04-30', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (7, 5, '2025-04-30', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (7, 5, '2025-05-01', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (7, 5, '2025-05-01', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (7, 5, '2025-05-01', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (7, 5, '2025-05-02', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (7, 5, '2025-05-02', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (7, 5, '2025-05-02', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (7, 5, '2025-05-03', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (7, 5, '2025-05-03', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (7, 5, '2025-05-03', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (7, 5, '2025-05-04', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (7, 5, '2025-05-04', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (7, 5, '2025-05-04', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (8, 4, '2025-04-29', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (8, 4, '2025-04-29', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (8, 4, '2025-04-29', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (8, 4, '2025-04-30', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (8, 4, '2025-04-30', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (8, 4, '2025-04-30', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (8, 4, '2025-05-01', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (8, 4, '2025-05-01', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (8, 4, '2025-05-01', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (8, 4, '2025-05-02', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (8, 4, '2025-05-02', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (8, 4, '2025-05-02', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (8, 4, '2025-05-03', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (8, 4, '2025-05-03', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (8, 4, '2025-05-03', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (8, 4, '2025-05-04', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (8, 4, '2025-05-04', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (8, 4, '2025-05-04', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (8, 5, '2025-04-29', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (8, 5, '2025-04-29', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (8, 5, '2025-04-29', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (8, 5, '2025-04-30', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (8, 5, '2025-04-30', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (8, 5, '2025-04-30', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (8, 5, '2025-05-01', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (8, 5, '2025-05-01', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (8, 5, '2025-05-01', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (8, 5, '2025-05-02', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (8, 5, '2025-05-02', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (8, 5, '2025-05-02', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (8, 5, '2025-05-03', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (8, 5, '2025-05-03', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (8, 5, '2025-05-03', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (8, 5, '2025-05-04', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (8, 5, '2025-05-04', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (8, 5, '2025-05-04', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (9, 4, '2025-04-29', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (9, 4, '2025-04-29', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (9, 4, '2025-04-29', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (9, 4, '2025-04-30', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (9, 4, '2025-04-30', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (9, 4, '2025-04-30', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (9, 4, '2025-05-01', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (9, 4, '2025-05-01', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (9, 4, '2025-05-01', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (9, 4, '2025-05-02', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (9, 4, '2025-05-02', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (9, 4, '2025-05-02', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (9, 4, '2025-05-03', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (9, 4, '2025-05-03', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (9, 4, '2025-05-03', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (9, 4, '2025-05-04', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (9, 4, '2025-05-04', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (9, 4, '2025-05-04', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (9, 5, '2025-04-29', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (9, 5, '2025-04-29', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (9, 5, '2025-04-29', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (9, 5, '2025-04-30', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (9, 5, '2025-04-30', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (9, 5, '2025-04-30', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (9, 5, '2025-05-01', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (9, 5, '2025-05-01', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (9, 5, '2025-05-01', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (9, 5, '2025-05-02', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (9, 5, '2025-05-02', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (9, 5, '2025-05-02', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (9, 5, '2025-05-03', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (9, 5, '2025-05-03', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (9, 5, '2025-05-03', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (9, 5, '2025-05-04', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (9, 5, '2025-05-04', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (9, 5, '2025-05-04', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (10, 4, '2025-04-29', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (10, 4, '2025-04-29', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (10, 4, '2025-04-29', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (10, 4, '2025-04-30', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (10, 4, '2025-04-30', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (10, 4, '2025-04-30', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (10, 4, '2025-05-01', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (10, 4, '2025-05-01', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (10, 4, '2025-05-01', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (10, 4, '2025-05-02', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (10, 4, '2025-05-02', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (10, 4, '2025-05-02', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (10, 4, '2025-05-03', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (10, 4, '2025-05-03', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (10, 4, '2025-05-03', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (10, 4, '2025-05-04', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (10, 4, '2025-05-04', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (10, 4, '2025-05-04', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (10, 5, '2025-04-29', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (10, 5, '2025-04-29', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (10, 5, '2025-04-29', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (10, 5, '2025-04-30', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (10, 5, '2025-04-30', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (10, 5, '2025-04-30', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (10, 5, '2025-05-01', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (10, 5, '2025-05-01', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (10, 5, '2025-05-01', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (10, 5, '2025-05-02', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (10, 5, '2025-05-02', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (10, 5, '2025-05-02', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (10, 5, '2025-05-03', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (10, 5, '2025-05-03', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (10, 5, '2025-05-03', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (10, 5, '2025-05-04', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (10, 5, '2025-05-04', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (10, 5, '2025-05-04', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (11, 4, '2025-04-29', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (11, 4, '2025-04-29', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (11, 4, '2025-04-29', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (11, 4, '2025-04-30', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (11, 4, '2025-04-30', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (11, 4, '2025-04-30', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (11, 4, '2025-05-01', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (11, 4, '2025-05-01', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (11, 4, '2025-05-01', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (11, 4, '2025-05-02', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (11, 4, '2025-05-02', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (11, 4, '2025-05-02', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (11, 4, '2025-05-03', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (11, 4, '2025-05-03', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (11, 4, '2025-05-03', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (11, 4, '2025-05-04', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (11, 4, '2025-05-04', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (11, 4, '2025-05-04', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (11, 5, '2025-04-29', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (11, 5, '2025-04-29', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (11, 5, '2025-04-29', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (11, 5, '2025-04-30', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (11, 5, '2025-04-30', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (11, 5, '2025-04-30', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (11, 5, '2025-05-01', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (11, 5, '2025-05-01', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (11, 5, '2025-05-01', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (11, 5, '2025-05-02', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (11, 5, '2025-05-02', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (11, 5, '2025-05-02', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (11, 5, '2025-05-03', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (11, 5, '2025-05-03', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (11, 5, '2025-05-03', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (11, 5, '2025-05-04', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (11, 5, '2025-05-04', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (11, 5, '2025-05-04', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (12, 4, '2025-04-29', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (12, 4, '2025-04-29', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (12, 4, '2025-04-29', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (12, 4, '2025-04-30', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (12, 4, '2025-04-30', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (12, 4, '2025-04-30', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (12, 4, '2025-05-01', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (12, 4, '2025-05-01', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (12, 4, '2025-05-01', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (12, 4, '2025-05-02', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (12, 4, '2025-05-02', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (12, 4, '2025-05-02', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (12, 4, '2025-05-03', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (12, 4, '2025-05-03', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (12, 4, '2025-05-03', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (12, 4, '2025-05-04', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (12, 4, '2025-05-04', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (12, 4, '2025-05-04', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (12, 5, '2025-04-29', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (12, 5, '2025-04-29', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (12, 5, '2025-04-29', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (12, 5, '2025-04-30', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (12, 5, '2025-04-30', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (12, 5, '2025-04-30', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (12, 5, '2025-05-01', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (12, 5, '2025-05-01', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (12, 5, '2025-05-01', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (12, 5, '2025-05-02', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (12, 5, '2025-05-02', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (12, 5, '2025-05-02', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (12, 5, '2025-05-03', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (12, 5, '2025-05-03', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (12, 5, '2025-05-03', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (12, 5, '2025-05-04', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (12, 5, '2025-05-04', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (12, 5, '2025-05-04', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (13, 4, '2025-04-29', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (13, 4, '2025-04-29', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (13, 4, '2025-04-29', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (13, 4, '2025-04-30', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (13, 4, '2025-04-30', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (13, 4, '2025-04-30', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (13, 4, '2025-05-01', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (13, 4, '2025-05-01', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (13, 4, '2025-05-01', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (13, 4, '2025-05-02', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (13, 4, '2025-05-02', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (13, 4, '2025-05-02', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (13, 4, '2025-05-03', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (13, 4, '2025-05-03', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (13, 4, '2025-05-03', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (13, 4, '2025-05-04', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (13, 4, '2025-05-04', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (13, 4, '2025-05-04', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (13, 5, '2025-04-29', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (13, 5, '2025-04-29', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (13, 5, '2025-04-29', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (13, 5, '2025-04-30', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (13, 5, '2025-04-30', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (13, 5, '2025-04-30', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (13, 5, '2025-05-01', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (13, 5, '2025-05-01', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (13, 5, '2025-05-01', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (13, 5, '2025-05-02', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (13, 5, '2025-05-02', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (13, 5, '2025-05-02', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (13, 5, '2025-05-03', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (13, 5, '2025-05-03', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (13, 5, '2025-05-03', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (13, 5, '2025-05-04', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (13, 5, '2025-05-04', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (13, 5, '2025-05-04', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (14, 4, '2025-04-29', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (14, 4, '2025-04-29', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (14, 4, '2025-04-29', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (14, 4, '2025-04-30', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (14, 4, '2025-04-30', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (14, 4, '2025-04-30', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (14, 4, '2025-05-01', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (14, 4, '2025-05-01', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (14, 4, '2025-05-01', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (14, 4, '2025-05-02', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (14, 4, '2025-05-02', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (14, 4, '2025-05-02', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (14, 4, '2025-05-03', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (14, 4, '2025-05-03', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (14, 4, '2025-05-03', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (14, 4, '2025-05-04', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (14, 4, '2025-05-04', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (14, 4, '2025-05-04', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (14, 5, '2025-04-29', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (14, 5, '2025-04-29', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (14, 5, '2025-04-29', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (14, 5, '2025-04-30', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (14, 5, '2025-04-30', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (14, 5, '2025-04-30', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (14, 5, '2025-05-01', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (14, 5, '2025-05-01', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (14, 5, '2025-05-01', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (14, 5, '2025-05-02', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (14, 5, '2025-05-02', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (14, 5, '2025-05-02', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (14, 5, '2025-05-03', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (14, 5, '2025-05-03', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (14, 5, '2025-05-03', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (14, 5, '2025-05-04', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (14, 5, '2025-05-04', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (14, 5, '2025-05-04', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (15, 4, '2025-04-29', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (15, 4, '2025-04-29', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (15, 4, '2025-04-29', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (15, 4, '2025-04-30', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (15, 4, '2025-04-30', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (15, 4, '2025-04-30', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (15, 4, '2025-05-01', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (15, 4, '2025-05-01', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (15, 4, '2025-05-01', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (15, 4, '2025-05-02', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (15, 4, '2025-05-02', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (15, 4, '2025-05-02', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (15, 4, '2025-05-03', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (15, 4, '2025-05-03', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (15, 4, '2025-05-03', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (15, 4, '2025-05-04', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (15, 4, '2025-05-04', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (15, 4, '2025-05-04', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (15, 5, '2025-04-29', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (15, 5, '2025-04-29', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (15, 5, '2025-04-29', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (15, 5, '2025-04-30', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (15, 5, '2025-04-30', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (15, 5, '2025-04-30', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (15, 5, '2025-05-01', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (15, 5, '2025-05-01', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (15, 5, '2025-05-01', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (15, 5, '2025-05-02', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (15, 5, '2025-05-02', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (15, 5, '2025-05-02', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (15, 5, '2025-05-03', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (15, 5, '2025-05-03', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (15, 5, '2025-05-03', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (15, 5, '2025-05-04', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (15, 5, '2025-05-04', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (15, 5, '2025-05-04', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (16, 4, '2025-04-29', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (16, 4, '2025-04-29', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (16, 4, '2025-04-29', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (16, 4, '2025-04-30', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (16, 4, '2025-04-30', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (16, 4, '2025-04-30', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (16, 4, '2025-05-01', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (16, 4, '2025-05-01', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (16, 4, '2025-05-01', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (16, 4, '2025-05-02', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (16, 4, '2025-05-02', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (16, 4, '2025-05-02', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (16, 4, '2025-05-03', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (16, 4, '2025-05-03', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (16, 4, '2025-05-03', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (16, 4, '2025-05-04', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (16, 4, '2025-05-04', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (16, 4, '2025-05-04', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (16, 5, '2025-04-29', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (16, 5, '2025-04-29', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (16, 5, '2025-04-29', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (16, 5, '2025-04-30', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (16, 5, '2025-04-30', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (16, 5, '2025-04-30', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (16, 5, '2025-05-01', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (16, 5, '2025-05-01', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (16, 5, '2025-05-01', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (16, 5, '2025-05-02', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (16, 5, '2025-05-02', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (16, 5, '2025-05-02', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (16, 5, '2025-05-03', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (16, 5, '2025-05-03', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (16, 5, '2025-05-03', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (16, 5, '2025-05-04', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (16, 5, '2025-05-04', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (16, 5, '2025-05-04', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (17, 4, '2025-04-29', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (17, 4, '2025-04-29', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (17, 4, '2025-04-29', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (17, 4, '2025-04-30', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (17, 4, '2025-04-30', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (17, 4, '2025-04-30', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (17, 4, '2025-05-01', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (17, 4, '2025-05-01', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (17, 4, '2025-05-01', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (17, 4, '2025-05-02', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (17, 4, '2025-05-02', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (17, 4, '2025-05-02', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (17, 4, '2025-05-03', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (17, 4, '2025-05-03', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (17, 4, '2025-05-03', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (17, 4, '2025-05-04', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (17, 4, '2025-05-04', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (17, 4, '2025-05-04', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (17, 5, '2025-04-29', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (17, 5, '2025-04-29', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (17, 5, '2025-04-29', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (17, 5, '2025-04-30', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (17, 5, '2025-04-30', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (17, 5, '2025-04-30', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (17, 5, '2025-05-01', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (17, 5, '2025-05-01', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (17, 5, '2025-05-01', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (17, 5, '2025-05-02', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (17, 5, '2025-05-02', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (17, 5, '2025-05-02', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (17, 5, '2025-05-03', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (17, 5, '2025-05-03', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (17, 5, '2025-05-03', '19:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (17, 5, '2025-05-04', '13:00:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (17, 5, '2025-05-04', '16:30:00');
+INSERT INTO movie_showtimes (movie_id, cinema_id, show_date, show_time) VALUES (17, 5, '2025-05-04', '19:00:00');

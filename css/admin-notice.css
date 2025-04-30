@@ -1,0 +1,124 @@
+
+h2 {
+    text-align: center;
+}
+.content {
+    flex: 1;
+    padding: 20px;
+}
+
+.form-container {
+    border-radius: 15px;
+    border: 2px solid black;
+    padding: 60px 20px 0% 20px;
+    width: 42%;
+    height: 620px;
+    margin: 40px auto 20px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.guide, .description, .eocndsodyd {
+    width: 80%;
+    max-width: 600px;
+    margin: 0 auto;
+    border-radius: 5px;
+    border: 1px solid black;
+}
+
+.guide, .eocndsodyd {
+    height: 60px;
+    padding-left: 10px;
+    font-size: large;
+    text-align: left;
+}
+
+.description {
+    height: 350px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    font-size: 16px;
+    padding-left: 10px;
+    overflow: auto;
+    resize: vertical;
+}
+
+.btn {
+    width: 40%;
+    height: 60px;
+    display: flex;
+    margin: 3%;
+    align-items: center;
+    justify-content: center;
+    background-color: #0091eb;
+    font-size: 20px;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    border: none;
+}
+
+.btn:hover {
+    background-color: #0077c2;
+    color: white;
+}
+
+/* --- 공지사항 리스트 스타일 --- */
+.notice-list {
+    width: 80%;
+    max-width: 800px;
+    margin: 30px auto;
+}
+
+.notice-item {
+    background-color: #fffbe6;
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    box-shadow: 1px 1px 5px rgba(0,0,0,0.1);
+    position: relative;
+}
+
+.notice-item .meta {
+    color: #777;
+    font-size: 14px;
+    margin: 8px 0;
+}
+
+/* 수정/삭제 버튼을 왼쪽 아래에 정렬 */
+.button-group {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* 삭제 버튼 */
+.delete-btn {
+    background-color: crimson;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* 수정 버튼 */
+.edit-btn {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.delete-btn:hover {
+    background-color: darkred;
+}
+
+.edit-btn:hover {
+    background-color: #3e8e41;
+}

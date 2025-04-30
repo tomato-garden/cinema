@@ -1,0 +1,246 @@
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #fafafa;
+  overflow: auto;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  min-width: 1000px;
+  background-color: white;
+}
+
+.arrow {
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 12px solid #aaa;
+}
+
+.content-box {
+  width: 800px;
+  height: 800px;
+  min-width: 800px;
+  min-height: 500px;
+  background: #fff;
+  border: 1px solid #ddd;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px 30px 40px 30px;
+  overflow: visible;
+  overflow-y: auto;
+  border: 1px solid black;
+}
+
+.content-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  gap: 5px;
+  overflow-x: hidden;
+}
+
+h3 {
+  margin-top: 0px;
+  width: 100%;
+  text-align: left;
+  padding-left: 20px;
+  margin-bottom: 0px;
+  color: #333;
+}
+
+.slider-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0px;
+  margin-bottom: 10px;
+  width: 703px;
+  overflow: visible;
+  overflow-y: hidden;
+  padding: 20px;
+}
+
+.slider-scroll {
+  flex: 1;
+  overflow-x: hidden;
+  white-space: nowrap;
+  display: flex;
+  gap: 10px;
+  padding: 20px;
+}
+
+.slider-list {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.slider-item {
+  flex: 0 0 auto;
+}
+
+.scroll-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  background: none;           /* ✅ 배경 제거 */
+  color: #333;                /* ✅ 원래 화살표 색 */
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 50%;
+}
+
+.scroll-btn:hover {
+  background: none;           /* ✅ 호버 시 배경 유지 */
+  color: #000;
+}
+
+
+#dayPrevBtn, #cinemaPrevBtn, #moviePrevBtn, #timePrevBtn {
+  left: 0;
+}
+#dayNextBtn, #cinemaNextBtn, #movieNextBtn, #timeNextBtn {
+  right: 0;
+}
+
+.day-item, .time-item {
+  padding: 12px 14px;
+  margin-right: 10px;
+  border: 1px solid #b3b3b3;
+  border-radius: 4px;
+  background-color: #f9fafb;
+  color: black;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.day-item:hover, .time-item:hover {
+  background-color: #dcdddf;
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.day-item.active, .time-item.active {
+  background-color: #2c3e50 !important;
+  color: white;
+}
+
+.movie-item.selected {
+  border: 2px solid rgba(28, 56, 102, 0.855);
+  box-shadow: 0 0 10px rgba(28, 56, 102, 0.855);
+}
+
+.movie-item {
+  width: 200px;
+  height: 100%; /* 필요 시 고정 높이로 바꿀 수 있음 */
+  display: flex;
+  flex-direction: column;         /* ✅ 세로 정렬 */
+  justify-content: space-between;/* ✅ 위쪽은 정보, 아래는 버튼 */
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  padding: 10px;
+  text-align: left;
+  margin-right: 10px;
+  transition: all 0.3s ease;
+  word-wrap: break-word;
+  white-space: normal;
+  overflow: hidden;
+}
+
+
+.movie-item:hover {
+  transform: scale(1.03);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+.movie-item strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+/* 🔹 영화 선택 버튼 색상 수정 */
+.select-btn {
+  margin-top: 10px;
+  width: 100%;
+  padding: 10px 6px;
+  background-color: #2c3e50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+.select-btn:hover {
+  background-color: #34495e;
+}
+
+.cinema-select-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  margin-bottom: 10px;
+  padding-left: 20px;
+}
+.cinema-item.active {
+  background-color: #2c3e50 !important;
+  color: white;
+}
+
+.region-select-wrapper {
+  margin-bottom: 15px;
+}
+.region-select {
+  padding: 6px;
+  width: 150px;
+}
+
+/* 🔹 완료 버튼 색상 수정 */
+.complete-btn {
+  margin-bottom: 10px;
+  width: 100%;
+  padding: 10px 6px;
+  background-color: #2c3e50;
+  color: white;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+.complete-btn:hover {
+  background-color: #34495e;
+}
+
+.complete-wrapper {
+  margin-top: 0;
+  text-align: center;
+  width: 700px;
+}
+
+.disabled-day {
+  background-color: #3f3737;
+  color: #999;
+  border: 1px solid #bbb;
+  cursor: not-allowed;
+}
+.cinema-item.selected.active {
+  background-color: #2c3e50;
+  color: white;
+}

@@ -1,0 +1,54 @@
+.content {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0;             /* 안에서 여백 줄 필요 없음 */
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+  
+  
+.button2 {
+    background-color: #000;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin: 10px;
+    min-width: 60px;
+    color : white;
+}
+
+.short-hr {
+  width: 40%;
+  margin-left: 0; /* 글자와 일치하는 위치로 */
+  margin-top: 10px;
+  margin-bottom: 20px; /* 아래쪽 여백 */
+}
+
+/* 전체 콘텐츠를 왼쪽 정렬 */
+.container {
+  display: flex;
+  justify-content: flex-start; /* 왼쪽 정렬 */
+}
+
+/* account-content 내의 모든 텍스트를 왼쪽 정렬 */
+.account-content {
+  text-align: left;
+}
+
+.account-content p {
+  margin-left: 0; /* 왼쪽 여백을 0으로 설정 */
+}
+
+.account-content h2 {
+  text-align: left; /* 제목을 왼쪽 정렬 */
+}
+
+
+
+
+
+
+

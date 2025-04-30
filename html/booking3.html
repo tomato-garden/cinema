@@ -1,0 +1,52 @@
+<div class="container"> 
+  <div class="steps-wrapper">
+    <div class="step">영화관 선택</div>
+    <div class="arrow"></div>
+    <div class="step">좌석 선택</div>
+    <div class="arrow"></div>
+    <div class="step">결제</div>
+    <div class="arrow"></div>
+    <div class="step">결제 완료</div>
+  </div>
+
+  <div class="content-box">
+    <div class="content-inner">
+      <h3>결제 정보</h3>
+      <div class="payment-box">
+        <div class="payment-info">
+          <p><strong>영화 제목:</strong> <span id="summary-title"></span></p>
+          <p><strong>상영 날짜:</strong> <span id="summary-date"></span></p>
+          <p><strong>좌석:</strong> <span id="summary-seats"></span></p>
+          <p><strong>총 금액:</strong> <span id="summary-price"></span></p>
+        </div>
+
+        <div class="payment-field">
+          <label for="payment-method"><strong>결제 수단 선택:</strong></label>
+          <select id="payment-method">
+            <option value="card">신용/체크카드</option>
+            <option value="kakaopay">카카오페이</option>
+            <option value="naverpay">네이버페이</option>
+            <option value="toss">토스</option>
+          </select>
+        </div>
+
+        <div class="payment-field">
+          <label for="card-number"><strong>카드 번호:</strong></label>
+          <input type="text" id="card-number" placeholder="1234-5678-9012-3456" />
+        </div>
+
+        <div class="payment-field">
+          <label for="card-expiry"><strong>유효 기간:</strong></label>
+          <input type="text" id="card-expiry" placeholder="MM/YY" />
+        </div>
+
+        <div class="payment-field">
+          <label for="card-cvc"><strong>CVC:</strong></label>
+          <input type="text" id="card-cvc" placeholder="123" />
+        </div>
+
+        <button class="pay-button">결제하기</button>
+      </div>
+    </div>
+  </div>
+</div>

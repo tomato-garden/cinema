@@ -1,0 +1,100 @@
+@font-face {
+  font-family: 'NanumHumanTTFBold';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2501-1@1.1/NanumHumanTTFBold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
+
+body {
+  margin: 0;
+  background: url('/img/back_img.png') no-repeat center center fixed;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-family: 'NanumHumanTTFBold';
+  font-weight: 300;
+}
+
+.container {
+  background: #fff;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  padding: 30px 40px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  width: 320px;
+}
+
+.signup-form h3 {
+  font-size: 26px;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #333;
+}
+
+.signup-form input,
+.signup-form button {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 5px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.signup-form input {
+  border: 1px solid #ccc;
+}
+
+.signup-form button {
+  background: #5a5a5a;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s;
+  padding: 12px;
+}
+
+.signup-form button:hover {
+  background: #444;
+}
+
+.id-check-container {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.id-check-container input {
+  flex: 1;
+}
+
+.id-check-container button {
+  width: auto;
+  padding: 10px 12px;
+  white-space: nowrap;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.signup-btn {
+  width: 100%;
+  padding: 12px;
+}
+
+/* 메시지 공통 스타일 */
+.message {
+  font-size: 14px;
+  margin-top: 5px;
+  color: red;
+}
+
+p {
+  font-size: 13px;
+}
+

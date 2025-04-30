@@ -1,0 +1,235 @@
+@font-face {
+    font-family: 'NanumHumanTTFBold';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2501-1@1.1/NanumHumanTTFBold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    overflow-x: hidden;
+    font-family: 'NanumHumanTTFBold';
+    font-weight: 500;
+}
+
+header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 20px;
+    position: relative;
+}
+
+.logo {
+    position: absolute;
+    left: 30px;
+    bottom: 150px;
+    z-index: 10; /* 다른 요소보다 위에 */
+}
+
+.logo a {
+    display: inline-block;
+}
+
+
+.logo img {
+    height: 110px;
+    position: absolute; 
+    cursor: pointer;
+    pointer-events: auto;  /* ← 클릭을 가능하게 함 */
+}
+
+
+/* 검색 컨테이너 */
+.search-container {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* 검색 바와 버튼을 중앙 정렬 */
+    width: 100%;
+    position: relative;
+    z-index: 2;
+    margin-top: 10px;
+    padding: 0 20px;
+}
+
+/* 검색 그룹 (검색 바 + 검색 버튼) */
+.search-group {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* 검색 바와 버튼 사이 간격 */
+}
+
+/* 검색 바 */
+.search-bar {
+    display: flex;
+    align-items: center;
+    border: 1px solid #0091eb;
+    border-radius: 20px;
+    padding: 5px 8px;
+    width: auto;
+    max-width: 350px;
+    height: 20px;
+    flex-grow: 1;
+}
+
+/* 버튼 공통 스타일 */
+.search-btn, .menu-btn {
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+
+.search-btn img {
+    height: 33px; 
+}
+
+.menu-btn img {
+    height: 45px; 
+}
+
+/* 메뉴 버튼을 오른쪽 끝으로 이동 */
+.menu-btn {
+    margin-left: auto;
+    position: absolute;
+    right: 20px;
+}
+
+
+
+.search-bar input {
+    border: none;
+    outline: none;
+    width: 100%;
+}
+
+
+.nav-container {
+    width: calc(100vw);
+    text-align: center;
+    margin-top: 20px; 
+}
+
+
+.nav-top-line {
+    width: 100vw;
+    height: 2px;
+    background-color: black;
+    margin-bottom: 3px;
+}
+
+.nav-bottom-line {
+    width: calc(100vw);
+    height: 2px;
+    background-color: black;
+    margin-top: 3px;
+}
+
+
+/* 네비게이션 스타일 */
+nav ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 10px 0;
+    margin: 0;
+}
+
+nav ul li {
+    margin: 0 20px;
+}
+
+/* 🔥 네비게이션 메뉴 항목에 밑줄 효과 추가 */
+nav ul li a {
+    position: relative; /* ::after 위치 기준 설정 */
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease-in-out;
+}
+
+nav ul li a::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 3px;
+    transform: translateX(-50%);
+    width: 0;
+    height: 3px;
+    background-color: #028cf5;
+    transition: width 0.3s ease-in-out;
+}
+
+nav ul li a:hover {
+    background-color: transparent;  /* 🔥 완전 투명 배경 */
+    color: black;                   /* 텍스트 색 유지 (원래 색 유지) */
+}
+
+
+nav ul li a:hover::after {
+    width: 100%;
+}
+
+
+
+.menu-icon {    
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.menu-container {
+    position: absolute;
+    right: 20px; /* 오른쪽 끝으로 이동 */
+    bottom: 45px;
+    transform: translateY(-50%); /* 세로 중앙 정렬 */
+
+}
+
+/* 드롭다운 메뉴 기본 스타일 (숨김) */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    margin-top: 40px;
+    margin-right: 30px;
+    right: 0;
+    top: 120%;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    width: 150px;
+    text-align: center;
+    padding: 10px 0;
+    z-index: 10;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 드롭다운 메뉴 안의 버튼 스타일 */
+.dropdown-menu a {
+    display: block;
+    padding: 10px 15px;
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    transition: background-color 0.3s ease-in-out;
+}
+
+/* hover 시 배경색 변경 */
+.dropdown-menu a:hover {
+    background-color: #0091eb;
+    color: white;
+}
+
+/* 로그아웃 항목 스타일 */
+.dropdown-menu .logout {
+    color: #afafaf; /* 흐리게 하기 (회색) */
+}
+
+/* ✅ 마우스를 올리면 드롭다운 메뉴 표시 */
+.menu-container:hover .dropdown-menu {
+    display: block;
+}

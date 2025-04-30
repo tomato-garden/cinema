@@ -1,0 +1,234 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Poppins', sans-serif;
+  background: #ffffff;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  min-width: 1100px;
+  background-color: white;
+}
+
+.step:hover {
+  background-color: #e0e0e0;
+}
+
+.arrow {
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 12px solid #ccc;
+}
+
+.content-box {
+  width: 900px;
+  height: 850px;
+  background: #ffffff;
+  border: 1px solid black;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  overflow-y: hidden;
+}
+
+.content-inner {
+  width: 100%;
+}
+
+h3 {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  color: #222;
+  text-align: center;
+  font-size: 24px;
+}
+
+.viewer-count {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.viewer-count label {
+  font-size: 16px;
+}
+
+.viewer-count input {
+  width: 60px;
+  font-size: 16px;
+  padding: 6px;
+  margin-left: 6px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.theater-layout {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin: 10px 0 30px;
+}
+
+.seat-zone {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.seat-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* ✅ 좌측 라벨 (A, B, C 등) */
+.seat-label {
+  width: 24px;
+  font-weight: bold;
+  text-align: center;
+  font-size: 13px;
+}
+
+/* ✅ 좌석 한 칸 */
+.seat {
+  width: 22px;
+  height: 22px;
+  background-color: #d6d6d6;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+/* ✅ 선택 불가 좌석 */
+.seat.disabled {
+  pointer-events: none;
+  background-color: #e0e0e0;
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* ✅ 좌석 hover 시 효과 */
+.seat:hover {
+  background-color: #90caf9;
+  transform: scale(1.1);
+}
+
+/* ✅ 선택된 좌석 */
+.seat.selected {
+  background-color: #1976d2;
+}
+
+/* ✅ 예약된 좌석 */
+.seat.reserved {
+  background-color: #312e2e !important;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+/* ✅ 좌석 번호 (1, 2, 3...) */
+.seat-number-label {
+  width: 22px;               /* ✅ .seat과 동일 */
+  height: 22px;
+  display: flex;
+  justify-content: center;   /* ✅ 가운데 정렬 */
+  align-items: center;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+/* ✅ 번호 앞의 빈 칸 정렬 보정 */
+.seat-row > div:first-child {
+  width: 24px;               /* ✅ .seat-label과 동일 */
+}
+
+.summary {
+  position: relative;
+  margin-top: 30px;
+  min-height: 80px;
+  padding: 10px;
+  border-top: 1px solid #ccc;
+  display: flex;
+  justify-content: space-between;
+}
+
+.summary-left {
+  text-align: left;
+}
+
+.summary-right {
+  text-align: right;
+  font-weight: bold;
+  margin-top: 70px;
+}
+
+.door {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 18px;
+}
+
+.screen-box, .door-box {
+  width: 100%;
+  text-align: center;
+  font-weight: bold;
+  padding: 12px;
+  border-radius: 4px;
+  margin: 12px 0;
+}
+
+.screen-box {
+  background-color: #cfe9f1;
+  color: #000;
+}
+
+.door-box {
+  background-color: #fdecea;
+  color: #000;
+}
+
+.next-step {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.next-button {
+  background: linear-gradient(135deg, #2c3e50, #34495e);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.next-button:hover {
+  background: linear-gradient(135deg, #2c3e50, #34495e);
+}
+
+.seating-area {
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  padding: 24px;
+  margin-top: 20px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+}

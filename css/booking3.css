@@ -1,0 +1,119 @@
+* {
+    box-sizing: border-box;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #ffffff;
+    overflow: auto;
+  }
+
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    min-width: 1000px;
+    background-color: white;
+  }
+
+
+  .arrow {
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 12px solid #aaa;
+  }
+
+.content-box {
+    width: 600px;
+    min-width: 700px;
+    background: #ffffff;
+    border: 1px solid black;
+    box-shadow: none;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 40px 30px;
+    overflow-y: auto;
+    max-height: 78vh;
+}
+
+.content-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    max-width: 600px;       /* 원하는 너비 지정 */
+    margin: 0 auto;         /* 가운데 정렬 */
+    width: 100%;
+    gap: 24px;
+  }
+
+.payment-box {
+    width: 100%;
+    max-width: 600px;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    padding: 24px;
+}
+
+.payment-info p {
+    margin: 6px 0;
+    color: #222;
+    font-size: 15px;
+    font-weight: 400;
+    text-align: left;
+}
+
+.payment-field {
+margin: 18px 0;
+display: flex;
+flex-direction: column;
+}
+
+.payment-field label {
+margin-bottom: 6px;
+font-weight: 500;
+color: #111;
+font-size: 14px;
+}
+
+.payment-field input,
+.payment-field select {
+padding: 10px 12px;
+font-size: 14px;
+border: 1px solid #aaa;
+outline: none;
+background-color: #f9f9f9;
+color: #222;
+}
+
+.payment-field input:focus,
+.payment-field select:focus {
+border-color: #333;
+background-color: #fff;
+}
+
+.pay-button {
+width: 100%;
+padding: 14px;
+background-color: #111;
+color: #fff;
+font-size: 15px;
+border: none;
+cursor: pointer;
+transition: background-color 0.3s ease;
+}
+
+.pay-button:hover {
+background-color: #000;
+}
+
+
+
+
+

@@ -1,0 +1,213 @@
+/* 기본 레이아웃 설정 */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f9f9f9;
+  margin: 0;
+  padding: 0;
+}
+
+th {
+  width: 80px;
+  height: 60px;
+}
+
+.main-content {
+  padding: 40px;
+  text-align: center;
+}
+
+.breadcrumb {
+  color: gray;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+/* 통계 영역 (요약 통계 + 고객 선호 통계) */
+.stats {
+  width: 65%;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 20px;
+  box-sizing: border-box;
+  text-align: center;
+  border: 1px solid #bbb;
+  border-radius: 8px;
+}
+
+/* 요약 통계 표 */
+.stats-table {
+  margin: 0 auto 20px;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.stats-table th, .stats-table td {
+  border: 1px solid #bbb;
+  padding: 10px;
+  text-align: center;
+}
+
+/* 고객 선호 통계 영역 */
+.preference {
+  background-color: #fdfdfd;
+  border: 1px solid #bbb;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* 분기 선택 영역 */
+.quarter-selector {
+  margin-bottom: 15px;
+  font-size: 16px;
+}
+
+/* 선호 통계 데이터 (영화 / 음식) 가로 배치 */
+.preference-data {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.movie-preference,
+.food-preference {
+  width: 45%;
+  text-align: left;
+}
+
+/* 리스트 스타일 */
+.movie-preference ul,
+.food-preference ul {
+  list-style: none;
+  padding: 0;
+}
+
+.movie-preference li,
+.food-preference li {
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+}
+
+.movie-preference .details,
+.food-preference .details {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #555;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .preference-data {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .movie-preference,
+  .food-preference {
+    width: 100%;
+  }
+}
+
+    .stats-table th, .stats-table td {
+        padding: 8px 12px;
+        text-align: left;
+    }
+    ul {
+        list-style-type: disc;
+        margin-left: 20px;
+    }
+    #loading {
+        font-weight: bold;
+        color: #555;
+        margin-bottom: 10px;
+    }
+
+/* 인기 영화 표 디자인 */
+.movie-stats {
+  width: 65%;
+  margin: 40px auto 20px;
+  background-color: #fff;
+  padding: 20px 30px;
+  border-radius: 5px;
+  border: 1px solid #bbb;
+}
+
+.movie-stats h2 {
+  margin-bottom: 15px;
+  color: #333;
+  font-size: 22px;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 8px;
+  text-align: left;
+}
+
+.movie-stats table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 16px;
+}
+
+.movie-stats th,
+.movie-stats td {
+  border: 1px solid #adadad;
+  padding: 5px 15px;
+  text-align: left;
+}
+
+.movie-stats th {
+  color: #333;
+}
+
+.movie-stats tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.movie-stats tr:hover {
+  background-color: #f0f8ff;
+  transition: background-color 0.2s;
+}
+
+/* 인기 음식 표 디자인 */
+.food-stats {
+  width: 65%;
+  margin: 40px auto 60px;
+  background-color: #fff;
+  padding: 20px 30px;
+  border-radius: 4px;
+  border: 1px solid #bbb;
+}
+
+.food-stats h2 {
+  margin-bottom: 15px;
+  color: #333;
+  font-size: 22px;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 8px;
+  text-align: left;
+}
+
+.food-stats table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 16px;
+}
+
+.food-stats th,
+.food-stats td {
+  border: 1px solid #adadad;
+  padding: 5px 15px;
+  text-align: left;
+}
+
+.food-stats th {
+  color: #333;
+}
+
+.food-stats tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.food-stats tr:hover {
+  background-color: #f0f8ff;
+  transition: background-color 0.2s;
+}

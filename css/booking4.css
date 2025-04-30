@@ -1,0 +1,181 @@
+* {
+    box-sizing: border-box;
+  }
+  
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #ffffff;
+    overflow: auto;
+  }
+  
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    min-width: 1000px;
+    background-color: white;
+  }
+  
+  
+  .arrow {
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 12px solid #aaa;
+  }
+  
+  .content-box {
+    width: 800px;
+    height: 600px;
+    background: #fff;
+    border: 1px solid black;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+  }
+  
+  .content-inner {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .complete-title {
+    margin-bottom: 24px;
+    color: #2c3e50;
+    font-size: 26px;
+    font-weight: bold;
+  }
+  
+  .booking-info-box {
+    display: flex;
+    flex-direction: row;
+    background: #ffffff;
+    border: 1px solid #ccc;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    border-radius: 5px !important; 
+  }
+  
+  /* 톱니형 테두리: 중앙 집중, 직각 스타일 */
+  .booking-info-box::before,
+  .booking-info-box::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 14px;
+    height: 120px;
+    transform: translateY(-50%);
+    background-image: repeating-linear-gradient(
+      to bottom,
+      #f5f6fa,
+      #f5f6fa 10px,
+      transparent 10px,
+      transparent 20px
+    );
+    background-size: 100% 20px;
+    background-repeat: repeat-y;
+    z-index: 1;
+  }
+  
+  .booking-info-box::before {
+    left: -14px;
+  }
+  
+  .booking-info-box::after {
+    right: -14px;
+  }
+  
+  /* 포스터 영역 */
+  .poster-placeholder {
+    width: 240px;
+    height: 100%;
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    border-right: 1px solid #ddd;
+    overflow: hidden; /* 🔐 혹시 넘칠까 봐 */
+  }
+  
+  .poster-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  /* 예매 정보 */
+  .booking-details-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 24px 25px;
+  }
+  
+  .booking-details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 15px;
+    color: #333;
+    line-height: 1.5;
+    text-align: left; /* ✅ 왼쪽 정렬 */
+    align-items: flex-start; /* ✅ 내용 좌측 정렬 유지 */
+  }
+  
+  /* QR 코드 */
+  .qr-box {
+    width: 90px;
+    height: 90px;
+    background-color: #e0e0e0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    color: #444;
+    box-shadow: none;
+    border-radius: 4px;
+    margin-top: 10px;
+
+  }
+  
+  .qr-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 4px;
+  }
+  
+  /* 버튼 */
+  .back-button {
+    margin-top: 36px;
+    padding: 12px 28px;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    background: linear-gradient(135deg, #2c3e50, #34495e);
+    color: #fff;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+  }
+  
+  .back-button:hover {
+    background: linear-gradient(135deg, #1a242f, #2e3c4f);
+    transform: translateY(-2px);
+  }
+  

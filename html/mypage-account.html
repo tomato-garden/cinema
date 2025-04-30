@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>마이페이지</title>
+    <link rel="stylesheet" href="/css/mypage.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    <div class="main-container">
+        <div class="account-content">
+            <h2 class="account-h2">계정정보</h2>
+            <hr class="short-hr"><br>
+            <p><strong>아이디: </strong> 
+                <span id="user-id"></span>
+                <button class="button2" onclick="toggleChange('id')">변경</button>
+                <div id="id-change-container" style="display: none;">
+                    <input type="text" id="new-id" placeholder="새 아이디 입력">
+                    <button onclick="confirmChange('id')">확인</button>
+                </div>
+            </p>
+            <hr class="short-hr">
+            <p><strong>비밀번호: </strong><span id="password">********</span>
+                <button class="button2" onclick="toggleChange('password')">변경</button>
+                <div id="pw-change-container" style="display: none;">
+                    <div class="password-container">
+                        <input type="password" id="new-password" placeholder="새 비밀번호 입력" onkeyup="checkPasswordMatch()">
+                        <i id="toggle-password" class="fa fa-eye-slash" onclick="togglePasswordVisibility('new-password', 'toggle-password')"></i>
+                    </div>
+                    <br>
+                    <div class="password-container">
+                        <input type="password" id="confirm-password" placeholder="새 비밀번호 확인" onkeyup="checkPasswordMatch()">
+                        <i id="toggle-password-confirm" class="fa fa-eye-slash" onclick="togglePasswordVisibility('confirm-password', 'toggle-password-confirm')"></i>
+                    </div>
+                    <p id="password-match-message" style="color: red; display: none;">비밀번호가 다릅니다.</p>
+                    <p id="password-match-success" style="color: green; display: none;">비밀번호가 일치합니다.</p>
+                    <button onclick="confirmChange('password')">확인</button>
+                </div>
+            </p>
+        </div>
+    </div>
+
+    <!-- <script src="/js/mypage-account.js"></script> -->
+</body>
+</html>
+

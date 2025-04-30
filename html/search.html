@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>필름프레임 - 검색 결과</title>
+  <link rel="stylesheet" href="/css/search.css">
+</head>
+<body>
+  <div id="header"></div>
+  <script src="/js/init-header.js"></script>
+  
+<div class="all-search-result">
+    <div class="search-title">검색 결과</div>
+    <hr />
+  
+    <!-- 🎬 영화 검색 결과 -->
+    <div class="search-category">
+      <h2>영화</h2>
+      <div class="search-result-list-container">
+        <div class="search-result-list" id="search-movie-list">
+        </div>
+      </div>
+      <div class="search-more-wrapper">
+        <button class="search-more-button" id="more-movies">▼</button>
+      </div>
+    </div>
+  
+    <hr class="movie-hr" />
+  
+    <!-- 🍿 매점 검색 결과 -->
+    <div class="search-category">
+      <h2>스토어</h2>
+      <div class="search-result-list-container">
+        <div class="search-result-list" id="search-store-list">
+        </div>
+      </div>
+      <div class="search-more-wrapper">
+        <button class="search-more-button" id="more-store">▼</button>
+      </div>
+    </div>
+  </div>
+  
+
+  <script src="/js/search.js"></script>
+</body>
+</html>

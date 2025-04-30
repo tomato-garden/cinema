@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>영화 더보기 - 필름프레임</title>
+    <link rel="stylesheet" href="/css/movie-list.css">
+    
+</head>
+<body>
+    <div id="header"></div>
+  <script src="/js/init-header.js"></script>
+
+    <div class="all-movie-list">
+        <!-- 카테고리 버튼들 -->
+        <div class="category-buttons">
+            <button id="current" class="active">현재 상영작</button>
+            <button id="upcoming">상영 예정작</button>
+            <button id="all">모든 영화</button>
+        </div>        
+
+        <!-- 현재 상영작 -->
+        <div class="category" id="current-list">
+            <div class="movie-list-container">
+                <div class="movie-list">
+                    <!-- <div class="movie">
+                        <img src="/movie-poster/josee, the tiger and the fish.png" alt="조제">
+                        <div class="movie-buttons">
+                            <button onclick="location.href='/html/booking.html'">예매하기</button>
+                            <button onclick="location.href='/html/movie-detail.html'">상세정보</button>
+                        </div>
+                        <div class="movie-title">조제, 호랑이 그리고 물고기들</div>
+                        <div class="movie-time">1시간 50분</div>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 상영 예정작 -->
+        <div class="category" id="upcoming-list" style="display: none;">
+            <div class="movie-list-container">
+                <div class="movie-list">
+                    <!-- <div class="movie">
+                        <img src="/movie-poster/josee, the tiger and the fish.png" alt="조제">
+                        <div class="movie-buttons">
+                            <button onclick="location.href='/html/booking.html'">예매하기</button>
+                            <button onclick="location.href='/html/movie-detail.html'">상세정보</button>
+                        </div>
+                        <div class="movie-title">조제, 호랑이 그리고 물고기들</div>
+                        <div class="movie-time">1시간 50분</div>
+                    </div>
+                    <div class="movie">
+                        <img src="/movie-poster/josee, the tiger and the fish.png" alt="조제">
+                        <div class="movie-buttons">
+                            <button onclick="location.href='/html/booking.html'">예매하기</button>
+                            <button onclick="location.href='/html/movie-detail.html'">상세정보</button>
+                        </div>
+                        <div class="movie-title">조제, 호랑이 그리고 물고기들</div>
+                        <div class="movie-time">1시간 50분</div>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 모든 영화 -->
+        <div class="category" id="all-list" style="display: none;">
+            <div class="movie-list-container">
+                <div class="movie-list">
+                    <!-- <div class="movie">
+                        <img src="/movie-poster/josee, the tiger and the fish.png" alt="조제">
+                        <div class="movie-buttons">
+                            <button onclick="location.href='/html/booking.html'">예매하기</button>
+                            <button onclick="location.href='/html/movie-detail.html'">상세정보</button>
+                        </div>
+                        <div class="movie-title">조제, 호랑이 그리고 물고기들</div>
+                        <div class="movie-time">1시간 50분</div>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+
+        <button class="show-more" onclick="expandMovies()" style="display: none;">펼쳐보기▼</button>
+
+    </div>
+    <script defer src="/js/movie-list.js"></script>
+</body>
+</html>

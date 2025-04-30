@@ -1,0 +1,126 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    margin: 0;
+}
+h2{
+    text-align: center;
+}
+.content {
+    flex: 1;
+    padding: 20px;
+}
+
+.form-container {
+    border-radius: 15px;
+    border: 2px solid black;
+    padding: 40px 20px;
+    width: 550px;
+    height: auto;
+    margin: 40px auto 20px auto;
+}
+
+.top-section {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+    gap: 20px;
+}
+
+.poster-upload {
+    aspect-ratio: 3 / 4;
+    height: 240px;
+    width: auto;
+    border: 2px dashed gray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: gray;
+    font-size: 14px;
+    flex-shrink: 0;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.info-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 500px;
+}
+
+.info-section input {
+    height: 30px;
+    width: 80%;
+    padding: 5px;
+    font-size: 14px;
+}
+
+.description {
+    width: 80%;
+    height: 850px;
+    padding: 10px;
+    font-size: 14px;
+}
+
+
+.btn {
+    width: 150px;
+    height: 40px;
+    margin-top: 20px;
+
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    transform: translateX(-50%);
+
+    background-color: #0091eb;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #0077c2;
+}
+
+
+.btn:hover {
+    background-color: #0077c2;
+}
+
+/* 태그들이 들어가는 전체 박스 */
+#cinemaTags {
+    display: flex;
+    flex-direction: column;  /* 세로로 정렬 */
+    gap: 6px;
+    margin-top: 10px;
+    padding: 12px;
+    background-color: #f9f9f9;  /* ✅ 배경 박스 */
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    min-height: 60px;
+  }
+  
+  /* 태그 하나하나의 모양 */
+  .cinema-tag {
+    background-color: #e0e0e0;
+    border-radius: 14px;
+    padding: 6px 10px;
+    font-size: 14px;
+    color: #333;
+    width: fit-content;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .cinema-tag:hover {
+    background-color: #d0d0d0;
+  }
+  

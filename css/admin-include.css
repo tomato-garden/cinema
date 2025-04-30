@@ -1,0 +1,52 @@
+/* admin-include.css */
+
+/* 사이드바 전체 스타일 */
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background-color: #3f3f3f;
+    padding: 0;
+    text-align: center;
+    line-height: 80px;
+    flex-shrink: 0;
+}
+
+/* 로고 이미지 */
+.logo {
+    width: 150px;
+    max-height: 100px;
+    object-fit: contain;
+    display: block;
+}
+
+/* 메뉴 리스트 기본 */
+.menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 20px;
+    color: white;
+}
+
+/* 각 메뉴 항목 */
+.menu li {
+    height: 75px;
+    width: 100%;
+    background-color: #3f3f3f;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+/* 강조 표시된 항목 (현재 페이지) */
+.menu li.guswo {
+    background-color: #afafaf;
+}
+
+/* hover 시 효과 */
+.menu li:hover {
+    background-color: #afafaf;
+}

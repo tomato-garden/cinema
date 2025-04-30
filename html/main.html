@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>필름프레임 - 영화관 사이트</title>
+    <link rel="stylesheet" href="/css/main.css">
+    
+</head>
+<body>
+    <header>
+        <div id="header"></div>
+  <script src="/js/init-header.js"></script>
+    </header>
+    <main>
+        <section class="banner">
+            <div class="banner-img">
+                <img src="/img/banner1.png" alt="MOVIE PRODUCTION">
+            </div>
+        </section>
+
+        <!-- ✅ 추천 영화 TOP 7 동적 로딩용 -->
+        <div class="top-movies-container">
+            <section class="top-movies" id="topMoviesContainer">
+                <!-- JS에서 영화 목록을 동적으로 불러옴 -->
+            </section>
+        </div>
+
+    </main>
+
+    <!-- 이번달 들어온 영화 -->
+    <section class="new-movies">
+        <div class="new-movie-box">
+            <div class="enter">이번달 들어온 영화</div>
+            <br>
+            <div class="movie-count-wrapper">
+                <span class="movie-count"></span>
+                <span class="movie-count"></span>
+                <span class="movie-count"></span>
+                <!-- <span class="movie-text">개</span> -->
+            </div>
+        </div>
+    </section>
+
+    <!-- 광고 -->
+    <div class="ad-section">
+        <div class="ad-small-container">
+            <img src="/img/ad1.png" alt="광고 1" class="ad-small">
+            <img src="/img/ad2.png" alt="광고 2" class="ad-small">
+            <img src="/img/ad3.png" alt="광고 3" class="ad-small">
+        </div>
+        <img src="/img/ad4.png" alt="광고 4" class="ad-large">
+    </div>
+
+    <!-- 푸터 -->
+    <footer class="site-footer">
+        <div class="footer-links">
+            <a href="#">회사소개</a>
+            <a href="#">이용약관</a>
+            <a href="#">개인정보처리방침</a>
+            <a href="#">이메일무단수집거부</a>
+            <a href="#">영상정보처리기기 운영방침</a>
+            <a href="#">회원안내</a>
+            <a href="#">채용안내</a>
+            <a href="#">광고/제휴문의</a>
+            <a href="#">사회적책임</a>
+        </div>
+        <div class="company-info">
+            <p>서울특별시 강남구 테헤란로 123 필름프레임 빌딩 10F</p>
+            <p>대표 이메일: contact@filmframe.com | 고객센터: 1588-0000 (유료)</p>
+            <p>사업자등록번호: 123-45-67890 | 통신판매업신고번호: 제2025-서울강남-0001호</p>
+            <p>대표이사: 홍길동 | 개인정보 보호 책임자: 이영희</p>
+            <p>호스팅 제공자: 필름프레임</p>
+        </div>
+        <div class="copyright">
+            <p>Copyright © FILM FRAME All Rights Reserved.</p>
+        </div>
+    </footer>
+    <script src="/js/main.js"></script>
+</body>
+</html>

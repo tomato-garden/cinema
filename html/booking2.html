@@ -1,0 +1,36 @@
+
+<div class="content-box">
+  <div class="content-inner">
+    <h3>관람 인원 선택</h3>
+    <div class="viewer-count">
+      <label>청소년:
+        <input type="number" id="teen-count" min="0" max="10" value="0" />
+      </label>
+      <label>성인:
+        <input type="number" id="adult-count" min="0" max="10" value="0" />
+      </label>
+    </div>
+    <div class="seating-area">
+      <h3>Screen</h3>
+      <div class="theater-layout">
+        <div class="seat-zone left"></div>
+        <div class="seat-zone center"></div>
+        <div class="seat-zone right"></div>
+      </div>
+      <div class="door">출입문</div>
+    </div>
+
+    <div class="summary">
+      <div class="summary-left">
+        <p>선택된 좌석: <span id="selected-seats">없음</span></p>
+        <p>총 인원 수: <span id="total-viewers">0</span>명</p>
+      </div>
+      <div class="summary-right">
+        <p><strong>예상 결제 금액: <span id="total-price">0</span>원</strong></p>
+      </div>
+    </div>
+    <div class="next-step">
+      <button class="next-button">다음 단계로 →</button>
+    </div>
+  </div>
+</div>

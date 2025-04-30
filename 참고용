@@ -1,0 +1,14 @@
+php -m | findstr mysqli
+http://localhost/phpinfo.php
+
+C:\Windows\System32>php -m | findstr mysqli
+PHP Warning:  Module "mysqli" is already loaded in Unknown on line 0
+mysqli
+
+extension=mysqli
+php -m | findstr mysqli
+
+
+C:\Windows\System32>php -m | findstr mysqli
+mysqli
+

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>회원가입</title>
+  <link rel="stylesheet" href="/css/register.css" />
+</head>
+<body>
+  <div class="container">
+    <form class="signup-form" action="/php/register.php" method="POST" autocomplete="off">
+      <h3>회원가입</h3>
+    
+      <!-- 🔧 name="name" 추가 -->
+      <input type="text" name="name" placeholder="이름을 입력하세요" required />
+    
+      <!-- 🔧 name="phone" 추가 -->
+      <input type="text" id="phone" name="phone" placeholder="전화번호를 입력하세요" required />
+      <p id="phone-check-result" class="message"></p>
+    
+      <div class="id-check-container">
+        <!-- 🔧 name="username" 추가 -->
+        <input type="text" id="username" name="username" placeholder="아이디를 입력하세요" required autocomplete="off" />
+        <button type="button">중복확인</button>
+      </div>
+      <p id="check-result" class="message"></p>
+    
+      <!-- 🔧 name="password" 추가 -->
+      <input type="password" id="p1" name="password" placeholder="비밀번호를 입력하세요" required autocomplete="off" />
+      <input type="password" id="p2" placeholder="비밀번호 확인" required />
+      <p id="pw-check-result" class="message"></p>
+    
+      <div class="action-buttons">
+        <button type="submit" class="signup-btn">회원가입</button>
+      </div>
+    </form>
+    
+
+    <div style="text-align: center; margin-top: 15px;">
+      <span class="login-text">
+        <p>이미 계정이 있으신가요? <a href="/html/login.html"> 로그인하러가기</a></p>
+      </span>
+    </div>
+  </div>
+
+  <script src="/js/register.js"></script>
+</body>
+</html>

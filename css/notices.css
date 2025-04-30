@@ -1,0 +1,130 @@
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background-color: white;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.notice {
+    background-color: #fff6d5;
+    padding: 20px;
+    margin: 0 auto 15px auto;
+    width: 80%;
+    max-width: 700px;
+    border-radius: 5px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    word-break: break-word;
+    overflow-wrap: break-word;
+    border: 1px solid gray;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.notice:hover{
+    transform: scale(1.02); /* 살짝 확대 */
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15); /* 그림자도 살짝 강조 */
+}
+.notice-title {
+    font-weight: bold;
+    font-size: 20px;
+    margin-bottom: 8px;
+}
+
+.notice-meta {
+    font-size: 13px;
+    color: #777;
+    margin-bottom: 10px;
+}
+
+.notice-content-preview {
+    font-size: 15px;
+    color: #333;
+    white-space: pre-wrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 5px;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    text-indent: 0;
+    margin-left: 0;
+}
+
+.notice-content-full {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 150px;
+    font-size: 15px;
+    color: #333;
+    margin-top: 10px;
+    white-space: pre-line;
+    line-height: 1.5;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    position: relative;
+    padding-bottom: 50px; /* 버튼 공간 확보 */
+}
+
+.collapse-btn-wrapper {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    text-align: right;
+    width: auto; /* ✅ 버튼만큼의 너비만 */
+}
+
+.read-more-text {
+    background: transparent;
+    border: none;
+    color: gray;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 0;
+    margin: 5px 0 0 0;
+    text-align: right;
+    display: block;
+    width: 100%; /* ✅ 전체 너비로 다시 복구 */
+}
+
+
+.read-more-text.collapse-btn {
+    display: inline-block;     /* ✅ 버튼 크기만큼만 표시 */
+    width: auto;               /* ✅ 너무 넓지 않게 */
+    padding: 4px 8px;          /* ✅ 버튼 모양 다듬기 */
+    margin: 0;
+    text-align: right;
+}
+
+
+
+/* 페이지네이션 스타일 */
+.pagination {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.page-btn {
+    background: none;
+    border: none;
+    color: #666;
+    margin: 0 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.page-btn.active {
+    font-weight: bold;
+    color: #000;
+    text-decoration: underline;
+}
+
+.notice-item p {
+    white-space: pre-wrap;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    text-indent: 0 !important;
+    margin-left: 0 !important;
+}

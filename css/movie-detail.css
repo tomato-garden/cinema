@@ -1,0 +1,498 @@
+
+        /* body {
+            display: flex;
+            flex-direction: column; 
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding-top: 60px;
+        } */
+
+        .container {
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: hidden;
+            margin-top: 38px;
+        }
+
+        .movie-header {
+            display: flex;
+            padding-bottom: 70px;
+            width: 100% ;
+            max-width: 1200px; /* 최대 너비를 설정하여 너무 넓어지지 않도록 조정 */
+            margin: 0 auto; /* 가로 가운데 정렬 */
+        }
+
+        .info{
+            margin-top: 50px;
+            text-align: left;
+        }
+
+        .info2{
+            margin-top: 50px;
+        }
+
+        .movie-info {
+            margin-left: 50px;
+            margin-top: 20px;
+        }
+
+        .movie-image {
+            position: relative;
+            min-width: 280px;
+            height: 400px;
+            border-radius: 5px;
+            background-color: black;
+            overflow: hidden;
+            margin-left: 90px;
+            box-shadow: 0 0 4px gray;
+        }
+        
+        .movie-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* border-radius: 8px; */
+            box-shadow: 0 0 5px gray;
+        }
+        
+        .overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            padding: 15px; /* 안쪽 여백 추가 */
+            box-sizing: border-box; /* padding이 크기에 영향을 주지 않도록 설정 */
+        }
+        
+        
+        .movie-image:hover .overlay {
+            opacity: 1;
+        }
+        
+
+        /* .movie-info {
+            margin-left: 50px;
+            flex-grow: 1;
+            display: grid;
+            align-content: space-around;
+        } */
+        .movie-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 100%;
+            height: auto; /* 높이를 자동으로 설정 */
+            overflow: visible; /* 요소가 잘리지 않도록 설정 */
+            gap: 15px; /* 요소 간격 추가 */
+        }
+        
+
+        .movie-info h1 {
+            margin: 0;
+            font-size: 28px;
+            color: #333;
+        }
+
+        .movie-info p {
+            font-size: 16px;
+            color: #666;
+            margin-top: 5px;
+            margin-left: 20px;
+        }
+
+        .movie-info h1, 
+        .movie-info p {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis; /* 글씨가 넘칠 경우 '...' 처리 */
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: flex-end; /* 버튼을 오른쪽 정렬 */
+            align-items: center;
+            flex-wrap: nowrap;
+            gap: 15px; /* 버튼 간격 조정 */
+            margin-top: 20px;
+            margin-right: 70px;
+        }
+        
+       /* 예매하기 버튼 스타일 */
+        .reserve-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px; /* 글자 크기 */
+            padding: 6px 12px; /* 버튼 크기 */
+            width: 200px; /* 가로 길이 */
+            height: 47px; /* 버튼 높이 */
+            background: #028cf5; /* 🔥 배경색: 예매 버튼 */
+            color: white; /* 글자 색상 */
+            border: none; /* 테두리 제거 */
+            border-radius: 5px; /* 둥근 모서리 */
+            cursor: pointer;
+            border: none;
+            box-shadow: 0  0 4px gray;
+        }
+
+        /* 관심 버튼 스타일 */
+        .interest-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 3px; /* 아이콘과 글자 간 간격 */
+            font-size: 12px; /* 글자 크기 */
+            padding: 4px 6px; /* 버튼 크기 */
+            width: 100px; /* 가로 길이 */
+            height: 40px; /* 버튼 높이 */
+            background: none; /* 🔥 배경 없음 (테두리만 남김) */
+            border: 1.8px solid rgb(167, 167, 167); /* 테두리만 남기기 */
+            border-radius: 5px; /* 둥근 모서리 */
+            cursor: pointer;
+            white-space: nowrap; /* 글자 줄바꿈 방지 */
+            overflow: hidden; /* 넘치는 텍스트 숨김 */
+            text-overflow: ellipsis; /* 넘칠 경우 '...' 표시 가능 */
+            color: rgb(90, 90, 90);
+        }
+
+        .interest-button span {
+            display: flex;
+            align-items: center; /* 숫자 높이 맞추기 */
+        }
+
+        /* 버튼 공통 스타일 */
+        .buttons button {
+            padding: 12px 20px;
+            /* border: none; */
+            border-radius: 50px; /* 버튼 모서리를 둥글게 */
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            /* box-shadow: 0 0 5px gray; */
+        }
+
+        /* 네비게이션 버튼 컨테이너 */
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: nowrap; /* 버튼이 줄 바뀌지 않도록 설정 */
+            position: sticky; /* 화면이 스크롤 되어도 고정 */
+            top: 0;
+            background-color: white;
+            padding: 10px 0;
+            z-index: 100; /* 다른 요소 위에 표시 */
+        }
+
+        .information {
+            display: flex;
+            flex-direction: column; /* 요소들을 세로 정렬 */
+            align-items: center; /* 가운데 정렬 */
+            justify-content: center; /* 부모 요소 안에서 중앙 정렬 */
+            width: 100%;
+            text-align: center;
+            font-size: 18px; /* 글씨 크기 조정 (선택사항) */
+            font-weight: bold; /* 글씨 굵게 (선택사항) */
+            padding: 10px 0; /* 위아래 여백 추가 */
+        }
+        
+
+        hr {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+        }
+
+        hr.contour {
+            width: 100%; /* 선 길이를 유지 */
+            margin-left: 0; /* 왼쪽 정렬 */
+            border: none;
+            height: 2px;
+            background-color: #ccc;
+            align-self: flex-start; /* Flexbox에서 왼쪽 정렬 */
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .info1 {
+            width: 60%; /* 전체 너비의 60% */
+            margin: 0 auto; /* 가운데 정렬 */
+            text-align: left; /* 내부 요소 왼쪽 정렬 (선택 사항) */
+        }
+        
+
+        /* 네비게이션 버튼 스타일 */
+        .nav-buttons button {
+            padding: 12px 25px;
+            font-size: 16px;
+            margin: 0 10px;
+            border-radius: 2px;
+            cursor: pointer;
+            white-space: nowrap; /* 버튼 텍스트 줄바꿈 방지 */
+            background-color: white;
+            border: none;
+            transition: background-color 0.3s ease;
+            position: relative;
+        }
+
+        /* 마우스를 올렸을 때 (hover) 밑줄 추가 */
+        .nav-buttons button:hover {
+            background-color: #cce9ff;
+        }
+
+        .nav-buttons button::after {
+            content: "";
+            display: block;
+            width: 0;
+            height: 3px;
+            background-color: #028cf5; /* 🔥 밑줄 색상 */
+            position: absolute;
+            bottom: -3px;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: width 0.3s ease-in-out;
+        }
+
+        /* 마우스를 올렸을 때 밑줄이 나타나도록 설정 */
+        .nav-buttons button:hover::after {
+            width: 100%;
+        }
+
+        .section {
+            max-width: 1100px; /* 최대 너비 설정 */
+            margin: 0 auto; /* 가로 중앙 정렬 */
+            padding: 20px;
+        }
+        
+
+        .section {
+            text-align: left; /* 텍스트 왼쪽 정렬 */
+            width: 100%; /* 부모 요소에 맞게 설정 */
+            margin-left: 0; /* 왼쪽 정렬 */
+            padding: 10px 20px; /* 내부 여백 조정 */
+        }
+        
+        .section p {
+            font-size: 16px;
+            color: #555;
+        }
+        /* 이미지 갤러리 스타일 */
+    .image-gallery {
+        margin-top: 20px;
+    }
+    .image-gallery h3 {
+        margin-bottom: 10px;
+    }
+    .image-preview {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin: 0 auto;             /* ✅ 가운데 정렬 */
+        margin-top: 10px;
+        width: 970px;               /* ✅ 이미지 4개 + gap 고려한 고정 너비 */
+    }
+    
+    .image-preview img {
+        width: 250px;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 5px;
+        box-shadow: 0 0 4px gray;
+    }
+    
+
+/* 관람평 입력 영역 스타일 */
+#reviewInput {
+    width: 100%;
+    min-height: 80px;
+    padding: 12px 16px; /*하이*/
+    margin-bottom: 12px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    resize: none;
+    font-size: 14px;
+    box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    flex: 1;                    /* 남는 공간 전부 차지 */
+}
+
+#reviewInput:focus {
+    border-color: #028cf5;
+    box-shadow: 0 0 0 3px rgba(2, 140, 245, 0.2);
+    outline: none;
+}
+
+/* 등록 버튼을 감싸는 div를 따로 만들기 추천 */
+.review-submit-wrapper {
+    display: flex;
+    justify-content: flex-start; /* 왼쪽 정렬 */
+    align-items: center; /* 상단 정렬 */
+    gap: 10px;
+    width: 100%;
+    max-width: 100%;
+}
+
+/* 등록 버튼 스타일 */
+#submitReview {
+    padding: 8px 20px;
+    background-color: #1f3c52;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s, box-shadow 0.2s;
+    text-align: right;
+    height: 40px;         /* 높이 줄임 */
+    margin-top: 5px;      /* 상단 간격 추가 (선택) */
+    
+}
+
+#submitReview:hover {
+    background-color: #11181d;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+
+/* 리뷰 리스트 컨테이너 */
+.review-list {
+    margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* 리뷰 아이템 구조 */
+.review-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    width: 100%;
+}
+
+/* 아바타 스타일 */
+.review-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgb(255, 255, 255); /* 상큼한 핑크+옐로우 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;               /* 살짝 키움 */
+    font-weight: 600;
+    color: black;                /* 부드러운 크림 화이트 */
+    flex-shrink: 0;
+    /* box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15); */
+    margin-top: 7px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    user-select: none;
+    border: #464646 solid 0.5px;
+}
+
+/* 내가 쓴 리뷰 스타일 */
+.review-avatar.my-avatar {
+    color: #111;
+}
+
+/* 상대방 이미지 스타일 */
+.review-avatar.other-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* 리뷰 텍스트 박스 */
+.review-box {
+    background: #ffffff;
+    padding: 14px 18px;
+    border-radius: 5px;
+    width: 100%;
+    max-width: 700px;
+    box-sizing: border-box;
+    word-wrap: break-word;
+    font-size: 14px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border: 1px solid #eee;
+    border: #afafaf solid 1px;
+}
+
+/* 작성자 이름, 시간 */
+.review-meta {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 8px;
+}
+
+/* 본문 텍스트 */
+.review-content {
+    font-size: 14px;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* 수정, 삭제 버튼 영역 */
+.review-controls {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+/* 버튼 스타일 */
+.review-controls button {
+    padding: 5px 12px;
+    font-size: 12px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    background-color: #f0f0f0;
+    color: #333;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.review-controls button:hover {
+    background-color: #7a7a7a;
+    color: white;
+}
+
+.review-controls button.delete-button:hover {
+    background-color: rgb(209, 0, 0);
+    color: white;
+}
+
+
+/* 관심 버튼 기본 상태 */
+.interest-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    font-size: 12px;
+    padding: 4px 6px;
+    width: 100px;
+    height: 40px;
+    background: none;
+    border: 1.8px solid rgb(167, 167, 167);
+    border-radius: 5px;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: rgb(90, 90, 90);
+}
+
+/* 🔥 관심 등록 상태일 때 스타일 */
+.interest-button.liked {
+    border: 1.8px solid red;
+    color: red;
+}

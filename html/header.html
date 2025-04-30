@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/header.css">
+</head>
+<body>
+    <header>
+        <!-- 로고 -->
+        <div class="logo">
+            <a href="/html/main.html">
+                <img src="/img/logo.png" alt="FF 필름프레임 로고">
+            </a>
+        </div>        
+
+        <!-- 검색창 & 메뉴 버튼 -->
+        <div class="search-container">
+            <div class="search-bar">
+                <input type="text" placeholder="검색할 내용을 입력하세요...">
+            </div>
+            <button class="search-btn">
+                <img src="/img/search.png" alt="검색" class="search-image">
+            </button>
+              
+              
+            <!-- 메뉴 버튼 및 드롭다운 -->
+            <div class="menu-container">
+                <button class="menu-btn">
+                    <img src="/img/menu.png" alt="메뉴 버튼">
+                </button>
+                <!-- 드롭다운 메뉴 -->
+                <div class="dropdown-menu">
+                    <a href="javascript:void(0);" id="account-settings-link">계정 설정</a>
+                    <a href="javascript:void(0);" id="booking-history-link">예매 내역</a>
+                    <a href="javascript:void(0);" id="store-history-link">매점 내역</a>
+                    <a id="auth-link" href="javascript:void(0);">로그인</a>
+                </div>                
+            </div>
+        </div>
+
+        <!-- 내비게이션 -->
+        <div class="nav-container">
+            <div class="nav-top-line"></div>
+            <!-- 내비게이션 -->
+            <nav>
+                <ul>
+                    <li><a href="/html/menu-board.html">스토어</a></li>
+                    <li><a href="/html/reservation.html">영화</a></li>
+                    <li><a href="/html/notices.html">공지사항</a></li>
+                </ul>
+            </nav>
+            <div class="nav-bottom-line"></div>
+        </div>
+    </header>
+    <script src="/js/header.js"></script>
+</body>
+</html>
