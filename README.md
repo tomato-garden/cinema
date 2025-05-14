@@ -1,4 +1,4 @@
-# 영화관 관리 시스템 with FFFF팀(장O호, 임O민, 배O민, 지O은)
+# 영화관 관리 시스템 with FFFF팀
 
 ![PHP](https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white)
 ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
